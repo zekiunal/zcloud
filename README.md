@@ -1,2 +1,2 @@
 # zcloud
-Cloud tools confs etc 
+Bulut araçları ve ayar dosyaları
