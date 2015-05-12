@@ -14,3 +14,20 @@ Consul düğümler ve [Registrator](https://github.com/gliderlabs/registrator) v
 ## DNS 
 Consul çalıştıktan sonra, DNS servisi için systemd-resolved servisine, Consul çalışan konteynerin bilgilerini içeren bir ayar dosyası eklenir ve systemd-resolved hizmeti yeniden başlatılır.
 
+## Kullanım
+
+Unit-file kayıt edilir:
+
+```
+fleetctl submit consul@.service
+```
+
+İhtiyaç duyulan kadar servis başlatılır:
+```
+fleetctl start consul@1
+fleetctl start consul@2
+fleetctl start consul@3
+fleetctl start consul@4
+fleetctl start consul@5
+...
+```
