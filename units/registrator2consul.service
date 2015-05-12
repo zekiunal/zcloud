@@ -1,0 +1,24 @@
+[Unit]
+Description=Registrator Consul
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
+After=consul.service
+Requires=consul.service
+After=etcd.service
+Requires=etcd.service
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/etc/environment
+
+ExecStartPre=-/usr/bin/docker kill registrator-consul
+ExecStartPre=-/usr/bin/docker rm registrator-consul
+ExecStartPre=/usr/bin/docker pull progrium/registrator:latest
+
+ExecStart=/bin/bash -c 'docker run --name registrator-consul --hostname registrator-consul-%H -v /var/run/docker.sock:/tmp/docker.sock progrium/registrator:latest consul://${COREOS_PRIVATE_IPV4}:8500'
+
+ExecStop=/usr/bin/docker stop registrator-consul
+
+[X-Fleet]
+Global=true
