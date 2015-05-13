@@ -1,8 +1,8 @@
 [Unit]
 Description=Registrator Consul
 Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
-After=consul.service
-Requires=consul.service
+#After=consul.service
+#Requires=consul.service
 After=etcd.service
 Requires=etcd.service
 After=docker.service
