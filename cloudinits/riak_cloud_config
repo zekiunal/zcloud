@@ -9,7 +9,7 @@ coreos:
     peer-addr: $private_ipv4:7001
   fleet:
     public-ip: $private_ipv4   # used for fleetctl ssh command
-    metadata= project=zaerp,clusterof=riak,disk=ssd
+    metadata: project=zaerp,clusterof=riak,disk=ssd
   units:
     - name: etcd.service
       command: start
