@@ -1,15 +1,17 @@
 #cloud-config
 
+ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC7IH7lgAqJBJ9n+Citn9p+RiDsgSVgnt7ihrtu1obDxnZRiHeWWyDPbZODRndAiMmrsxFOk1NbPenywh+OjnsdDLyNtlt4d2xRmPC2Fh7b908bSpKw83+FxwzahpA10kwJ2klKgpa+9eNGKss7g/SNusqy/XMtBq66v7C7m2tajtIVRm8U+KJlSvapgiKrtZKj87gBnR/dl6zYER9uEAL+eh19PCczltQtV+NkJFQnizGzrQJECfmJRMtkWj03nMXJdRFki00kWAsd8Ws1v4oweM28jSnKwGYxcotWZ0dabTmgtrlxCftmAtOwhaKFfHjawSOhI9wa/zL222qVbh3 ali@ali-UX31A
 coreos:
   etcd:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new
-    discovery: https://discovery.etcd.io/ca74cea0f1f46fdb9c60877392a28a4f
+    discovery: https://discovery.etcd.io/5a9cb5447b2a8aff3e20e08192e9a207
     # use $public_ipv4 if your datacenter of choice does not support private networking
     addr: $private_ipv4:4001
     peer-addr: $private_ipv4:7001
   fleet:
     public-ip: $private_ipv4   # used for fleetctl ssh command
-    metadata: project=zaerp,clusterof=riak,disk=ssd
+    metadata: zaerp,machineof=riak,disk=ssd
   units:
     - name: etcd.service
       command: start
@@ -54,4 +56,3 @@ coreos:
         ExecStop=/usr/bin/docker stop ${CONTAINER}
         ExecStopPost=/bin/bash -c 'rm /etc/systemd/resolved.conf.d/00-consul-dns.conf && systemctl restart systemd-resolved'
         ExecStopPost=-/usr/bin/etcdctl rm /consul.io/bootstrap/machines/%m
-
