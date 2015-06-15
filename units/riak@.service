@@ -5,13 +5,12 @@ Description=riak
 User=core
 ExecStartPre=-/usr/bin/docker kill riak-%i
 ExecStartPre=-/usr/bin/docker rm riak-%i
-ExecStartPre=/usr/bin/docker pull quay.io/zetaops/riaknode
+ExecStartPre=/usr/bin/docker pull alirizakeles/riak:2.1.1-1
 
-ExecStart=/usr/bin/docker run --rm --name riak-%i -p 8098:8098 -p 8087:8087 -p 8043:8043 -v /var/lib/riak:/home/core/data/var/lib/riak -v /var/log/riak:/home/core/data/var/log/riak -v /etc/riak/certs:/home/core/data/etc/riak/certs quay.io/zetaops/riaknode
+ExecStart=/usr/bin/docker run --rm --name riak-%i -P -v /var/lib/riak:/home/ali/vols/riak/data -v /var/log/riak:/home/ali/vols/riak/log alirizakeles/riak:2.1.1-1
 ExecStop=/usr/bin/docker stop riak-%i
 
 [X-Fleet]
 Conflicts=riak@*.service
-MachineMetadata=project=zaerp
 MachineMetadata=clusterof=riak
 MachineMetadata=disk=ssd
