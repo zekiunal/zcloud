@@ -1,0 +1,35 @@
+[Unit]
+Description=Redis
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/redis-service.md
+After=docker.service
+Requires=docker.service
+After=etcd.service
+Requires=etcd.service
+
+[Service]
+TimeoutStartSec=3min
+RestartSec=20sec
+EnvironmentFile=/etc/environment
+Restart=on-failure
+
+ExecStartPre=-/usr/bin/docker kill redis-%i
+ExecStartPre=-/usr/bin/docker rm  redis-%i
+ExecStartPre=/usr/bin/docker pull redis
+ExecStartPre=/bin/bash /home/core/bin/redis_cluster.sh
+
+ExecStart=/bin/bash -c 'MAS=`etcdctl get /zaerp/envs/REDIS_MASTER`; \
+                        if [ -n "$MAS" ] ; then \
+                            echo master var: "$MAS"; \
+                            EXEC="/usr/bin/docker run --name redis-%i --hostname %H -P  redis redis-server --slaveof $MAS";\
+                            eval $EXEC; \
+                        else \
+                            /usr/bin/docker run --name redis-%i --hostname %H -P redis; \
+                            echo master yok: "$MAS"; \
+                        fi'
+
+ExecStop=/usr/bin/docker stop redis-%i
+
+
+[X-Fleet]
+MachineMetadata=machineof=redis
+Conflicts=redis_cluster@*.service

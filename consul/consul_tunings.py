@@ -93,5 +93,3 @@ for service_name in all_service_list:
             #     u'ServiceTags': None
             # }
             insert_health_check(service['ServiceName'])
-
-

@@ -1,21 +1,29 @@
 #cloud-config
-
 ssh_authorized_keys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC7IH7lgAqJBJ9n+Citn9p+RiDsgSVgnt7ihrtu1obDxnZRiHeWWyDPbZODRndAiMmrsxFOk1NbPenywh+OjnsdDLyNtlt4d2xRmPC2Fh7b908bSpKw83+FxwzahpA10kwJ2klKgpa+9eNGKss7g/SNusqy/XMtBq66v7C7m2tajtIVRm8U+KJlSvapgiKrtZKj87gBnR/dl6zYER9uEAL+eh19PCczltQtV+NkJFQnizGzrQJECfmJRMtkWj03nMXJdRFki00kWAsd8Ws1v4oweM28jSnKwGYxcotWZ0dabTmgtrlxCftmAtOwhaKFfHjawSOhI9wa/zL222qVbh3 ali@ali-UX31A
 coreos:
   etcd:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new
-    discovery: https://discovery.etcd.io/5a9cb5447b2a8aff3e20e08192e9a207
+    discovery: https://discovery.etcd.io/aeadf15e7e4e427a06962e0b292e224e
     # use $public_ipv4 if your datacenter of choice does not support private networking
     addr: $private_ipv4:4001
     peer-addr: $private_ipv4:7001
   fleet:
     public-ip: $private_ipv4   # used for fleetctl ssh command
     metadata: zaerp,machineof=riak,disk=ssd
+  flannel:
+    interface: $private_ipv4
   units:
     - name: etcd.service
       command: start
     - name: fleet.service
+      command: start
+    - name: flanneld.service
+      drop-ins:
+        - name: 50-network-config.conf
+          content: |
+            [Service]
+            ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": "172.17.0.0/16" }'
       command: start
     - name: consul.service
       command: start
@@ -23,10 +31,12 @@ coreos:
         [Unit]
         Description=Consul
         Documentation=https://github.com/zetaops/zcloud/blob/master/docs/consul-service.md
-        After=docker.service
         Requires=docker.service
-        After=etcd.service
+        Requires=flanneld.service
         Requires=etcd.service
+        After=etcd.service
+        After=flanneld.service
+        After=docker.service
 
         [Service]
         TimeoutStartSec=0
@@ -37,7 +47,7 @@ coreos:
         Environment=VERSION=2015041102
         Environment=CONTAINER=consul
 
-        ExecStartPre=/usr/bin/mkdir -p /etc/systemd/resolved.conf.d
+        #ExecStartPre=/usr/bin/mkdir -p /etc/systemd/resolved.conf.d
 
         ExecStartPre=-/usr/bin/docker kill ${CONTAINER}
         ExecStartPre=-/usr/bin/docker rm ${CONTAINER}
@@ -51,8 +61,9 @@ coreos:
           -p 8400:8400 -p 8500:8500 -p 53:8600/udp \
           ${DOCKER_REPO}:${VERSION} ${COREOS_PRIVATE_IPV4} %m'
 
-        ExecStartPost=/bin/bash -c 'sleep 1; echo -e "[Resolve]\nDNS=$(docker inspect --format \'{{ .NetworkSettings.IPAddress }}\' ${CONTAINER})" > /etc/systemd/resolved.conf.d/00-consul-dns.conf && systemctl restart systemd-resolved'
+        #ExecStartPost=/bin/bash -c 'sleep 1; echo -e "[Resolve]\nDNS=$(docker inspect --format \'{{ .NetworkSettings.IPAddress }}\' ${CONTAINER})" > /etc/systemd/resolved.conf.d/00-consul-dns.conf && systemctl restart systemd-resolved'
 
         ExecStop=/usr/bin/docker stop ${CONTAINER}
-        ExecStopPost=/bin/bash -c 'rm /etc/systemd/resolved.conf.d/00-consul-dns.conf && systemctl restart systemd-resolved'
+        #ExecStopPost=/bin/bash -c 'rm /etc/systemd/resolved.conf.d/00-consul-dns.conf && systemctl restart systemd-resolved'
         ExecStopPost=-/usr/bin/etcdctl rm /consul.io/bootstrap/machines/%m
+
