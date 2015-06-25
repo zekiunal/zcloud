@@ -9,8 +9,10 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-TimeoutStartSec=0
+TimeoutStartSec=3min
+RestartSec=20sec
 EnvironmentFile=/etc/environment
+Restart=on-failure
 
 ExecStartPre=-/usr/bin/docker kill registrator-consul
 ExecStartPre=-/usr/bin/docker rm registrator-consul

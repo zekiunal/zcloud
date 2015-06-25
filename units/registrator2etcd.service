@@ -6,11 +6,13 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-TimeoutStartSec=0
+TimeoutStartSec=3min
+RestartSec=20sec
 EnvironmentFile=/etc/environment
+Restart=on-failure
+
 ExecStartPre=-/usr/bin/docker kill registrator-etcd
 ExecStartPre=-/usr/bin/docker rm registrator-etcd
-#ExecStartPre=/usr/bin/docker pull progrium/registrator:latest
 ExecStartPre=/usr/bin/docker pull gliderlabs/registrator:latest
 
 ExecStart=/bin/bash -c 'docker run --name registrator-etcd --hostname %H -v /var/run/docker.sock:/tmp/docker.sock gliderlabs/registrator:latest etcd://${COREOS_PRIVATE_IPV4}:4001/services'
@@ -19,3 +21,4 @@ ExecStop=/usr/bin/docker stop registrator-etcd
 
 [X-Fleet]
 Global=true
+
