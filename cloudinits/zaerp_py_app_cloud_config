@@ -1,6 +1,5 @@
 #cloud-config
 users:
-  # TODO: coreos-ssh-import-github deprecated replace it with new remote import
   - name: ali
     coreos-ssh-import-github: alirizakeles
 coreos:
@@ -12,7 +11,7 @@ coreos:
     peer-addr: $private_ipv4:7001
   fleet:
     public-ip: $private_ipv4   # used for fleetctl ssh command
-    metadata: zaerp,machineof=riak,disk=ssd
+    metadata: project=zaerp,machineof=app,disk=ssd
   flannel:
     interface: $private_ipv4
   units:
@@ -67,6 +66,7 @@ coreos:
         After=flanneld.service
         After=docker.service
 
+
         [Service]
         TimeoutStartSec=0
         Restart=always
@@ -76,10 +76,13 @@ coreos:
         Environment=VERSION=2015041102
         Environment=CONTAINER=consul
 
+        # make sure /etc/systemd/resolved.conf.d dir exists so we can add Consul's DNS resolver to system
+        # ExecStartPre=/usr/bin/mkdir -p /etc/systemd/resolved.conf.d
+
+
         ExecStartPre=-/usr/bin/docker kill ${CONTAINER}
         ExecStartPre=-/usr/bin/docker rm ${CONTAINER}
-
-
+        # ExecStartPre=-/bin/bash -c 'rm /etc/systemd/resolved.conf.d/00-consul-dns.conf && systemctl restart systemd-resolved'
         ExecStartPre=/usr/bin/docker pull ${DOCKER_REPO}:${VERSION}
         ExecStartPre=/usr/bin/docker pull cap10morgan/conntrack
         ExecStartPre=/usr/bin/docker run --net=host --privileged --rm cap10morgan/conntrack -F
@@ -90,5 +93,11 @@ coreos:
           -p 8400:8400 -p 8500:8500 -p 53:8600/udp \
           ${DOCKER_REPO}:${VERSION} ${COREOS_PRIVATE_IPV4} %m'
 
+
+        # ExecStartPost=/bin/bash -c 'sleep 1; echo -e "[Resolve]\nDNS=$(docker inspect --format \'{{ .NetworkSettings.IPAddress }}\' ${CONTAINER})" > /etc/systemd/resolved.conf.d/00-consul-dns.conf && systemctl restart systemd-resolved'
+
         ExecStop=/usr/bin/docker stop ${CONTAINER}
+        # ExecStopPost=/bin/bash -c 'rm /etc/systemd/resolved.conf.d/00-consul-dns.conf && systemctl restart systemd-resolved'
         ExecStopPost=-/usr/bin/etcdctl rm /consul.io/bootstrap/machines/%m
+
+

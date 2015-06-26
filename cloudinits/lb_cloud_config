@@ -29,6 +29,7 @@ coreos:
       command: start
 
     # timezone settings. ntp use coreos default pools, just tune timezone 
+    # https://coreos.com/docs/cluster-management/setup/configuring-date-and-timezone/ 
     - name: settimezone.service
       command: start
       content: |
