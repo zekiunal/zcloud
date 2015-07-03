@@ -78,7 +78,6 @@ node "Node" {
                 Fleet Unit
             end note
         }
-
         folder "Public Load Balancers" as PublicLB {
             (HA Proxy with Confd) as HAProxyConfdPublic1
             (HA Proxy with Confd) as HAProxyConfdPublic2
@@ -113,10 +112,7 @@ node "Node" {
         PrivateLB <-- AppContainers
         PrivateLB --> RiakKVCluster
         PrivateLB --> ZatoServers
-        RiakCSCluster --> RiakKVCluster1
+        RiakCSCluster --> RiakKVCluster
     }
-
 }
-
-
 @enduml
