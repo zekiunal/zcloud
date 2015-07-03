@@ -1,0 +1,122 @@
+@startuml
+'left to right direction
+skinparam packageStyle rect
+
+
+node "Node" {
+    folder "Boot time System Units"{
+        (Flannel) as Flannel #DDDDDD
+        (Etcd) as Etcd #DDDDDD
+        (Docker) as Docker #red
+        (Consul) as Consul #red
+    }
+
+    folder "Fleet Controled Orchestration Units"{
+        (Registrator2Etcd) as R2E
+        (Registrator2Consul) as R2C
+    }
+
+    Docker .> R2E
+    R2E .> Etcd
+    Docker .> R2C
+    R2C .> Consul
+
+    note right of R2E
+        Listens to docker
+        socket and inform Etcd
+    end note
+
+    note right of R2C
+        Listens to docker
+        socket and inform Consul
+    end note
+
+    note left of Flannel
+        Network layer for
+        fleet controlled
+        containers
+    end note
+
+    note left of Docker
+        Container Service
+    end note
+
+    note left of Etcd
+        Cluster-wide KV
+    end note
+
+    note left of Consul
+        Cluster-wide
+        service discovery
+        and health check
+    end note
+
+    folder "Fleet Controlled Application Units" {
+        folder "Riak KV Cluster" as RiakKVCluster{
+            (Riak KV) as Riak1
+            (Riak KV) as Riak2
+            (Riak KV) as Riak3
+            (Riak KV) as Riak4
+            (Riak KV) as Riak5
+            note right of Riak1
+                Large VM
+                Docker Container
+                Fleet Unit
+                Exposed Ports:
+                8087 8098 8043
+                11000 - 12999
+                Volume 20gb /var/riak/data
+            end note
+        }
+        folder "Riak CS Cluster" as RiakCSCluster{
+            (Riak CS) as RiakCS1
+            (Riak CS) as RiakCS2
+            (Riak CS) as RiakCS3
+            note right of RiakCS3
+                Standart VM
+                Dockerfile
+                Fleet Unit
+            end note
+        }
+
+        folder "Public Load Balancers" as PublicLB {
+            (HA Proxy with Confd) as HAProxyConfdPublic1
+            (HA Proxy with Confd) as HAProxyConfdPublic2
+        }
+        folder "Private Load Balancers" as PrivateLB {
+            (HA Proxy with Confd) as HAProxyConfdPrivate1
+            (HA Proxy with Confd) as HAProxyConfdPrivate2
+        }
+
+        folder "Redis Cluster" as RedisCluster {
+            (Redis Master) as RedisMaster
+            (Redis Slave) as RedisSlave1
+            (Redis Slave) as RedisSlave2
+        }
+        folder "App Containers" as AppContainers {
+            (Ulakbus App) as App1
+            (Ulakbus App) as App2
+            (Ulakbus App) as App3
+            (Ulakbus App) as App4
+        }
+
+        folder "Zato Servers" as ZatoServers{
+            (Zato Server) as ZatoServer1
+            (Zato Server) as ZatoServer2
+            (Zato Server) as ZatoServer3
+            (Zato Web Admin) as ZatoWA1
+            (Zato Web Admin) as ZatoWA2
+        }
+        PublicLB--> AppContainers
+        PrivateLB --> RedisCluster
+        PrivateLB --> RiakCSCluster
+        PrivateLB <-- AppContainers
+        PrivateLB --> RiakKVCluster
+        PrivateLB --> ZatoServers
+        RiakCSCluster --> RiakKVCluster1
+    }
+
+}
+
+
+@enduml
