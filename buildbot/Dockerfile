@@ -81,9 +81,9 @@ run sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 # Create buildbot configuration
 run cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 
-run git clone git@github.com:zetaops/zcloud.git
-run cp -a zcloud/buildbot/master/master.cfg \
-    /data/buildbot/master/master.cfg
+run cd /data/buildbot/master/
+run wget https://raw.githubusercontent.com/zetaops/zcloud/buildbot/buildbot/master/master.cfg
+
 run cd /data/buildbot; sudo -u admin sh -c \
     "buildslave create-slave slave localhost:9989 ulabus-slave 3V6SBwag"
 
