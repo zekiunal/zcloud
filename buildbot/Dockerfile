@@ -85,7 +85,7 @@ run cd /data/buildbot/master/
 run wget https://raw.githubusercontent.com/zetaops/zcloud/buildbot/buildbot/master/master.cfg
 
 run cd /data/buildbot; sudo -u admin sh -c \
-    "buildslave create-slave slave localhost:9989 ulabus-slave 3V6SBwag"
+    "buildslave create-slave slave localhost:9989 ulakbus-slave 3V6SBwag"
 
 # Set supervisord buildbot and sshd processes
 run /bin/echo -e "[program:sshd]\ncommand=/usr/sbin/sshd -D\n" > \
