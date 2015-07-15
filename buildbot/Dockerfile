@@ -82,7 +82,7 @@ run sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 run cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 
 run cd /data/buildbot/master/
-COPY master.cfg /master/
+COPY master/master.cfg /master/
 
 run cd /data/buildbot; sudo -u admin sh -c \
     "buildslave create-slave ulakbus-slave localhost:9989 ulakbus-slave 3V6SBwag"
