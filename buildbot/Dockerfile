@@ -63,34 +63,31 @@ from ubuntu:14.04
 
 # Install buildbot and its dependencies
 
-run /bin/echo -e "\
+RUN /bin/echo -e "\
     deb http://archive.ubuntu.com/ubuntu trusty main universe\n\
     deb http://archive.ubuntu.com/ubuntu trusty-updates main universe" > \
     /etc/apt/sources.list
-run apt-get update
-run DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
     supervisor git sudo ssh
-run pip install buildbot buildbot_slave
+RUN pip install buildbot buildbot_slave
 
 # Set ssh superuser (username: admin   password: admin)
-run mkdir /data /var/run/sshd
-run useradd -m -d /data/buildbot -p sa1aY64JOY94w admin
-run sed -Ei 's/adm:x:4:/admin:x:4:admin/' /etc/group
-run sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
+RUN mkdir /data /var/RUN/sshd
+RUN useradd -m -d /data/buildbot -p sa1aY64JOY94w admin
+RUN sed -Ei 's/adm:x:4:/admin:x:4:admin/' /etc/group
+RUN sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 
 # Create buildbot configuration
-run cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
+RUN cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 
-run cd /data/buildbot/master/
-COPY master/master.cfg /master/
-
-run cd /data/buildbot; sudo -u admin sh -c \
+RUN cd /data/buildbot; sudo -u admin sh -c \
     "buildslave create-slave ulakbus-slave localhost:9989 ulakbus-slave 3V6SBwag"
 
 # Set supervisord buildbot and sshd processes
-run /bin/echo -e "[program:sshd]\ncommand=/usr/sbin/sshd -D\n" > \
+RUN /bin/echo -e "[program:sshd]\ncommand=/usr/sbin/sshd -D\n" > \
     /etc/supervisor/conf.d/sshd.conf
-run /bin/echo -e "\
+RUN /bin/echo -e "\
 [program:buildmaster]\n\
 command=twistd --nodaemon --no_save -y buildbot.tac\n\
 directory=/data/buildbot/master\n\
@@ -103,7 +100,8 @@ user=admin\n" > \
 
 # Setup running docker container buildbot process
 # Make host port 8010 match container port 8010
-expose :8010
+EXPOSE :8010
 # Expose container port 22 to a random port in the host.
-expose 22
-cmd ["/usr/bin/supervisord", "-n"]
+# expose 22
+CMD ["/usr/bin/supervisord", "-n"]
+COPY master/master.cfg /data/buildbot/master/
