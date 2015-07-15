@@ -94,7 +94,7 @@ directory=/data/buildbot/master\n\
 user=admin\n\n\
 [program:buildworker]\n\
 command=twistd --nodaemon --no_save -y buildbot.tac\n\
-directory=/data/buildbot/slave\n\
+directory=/data/buildbot/ulakbus-slave\n\
 user=admin\n" > \
     /etc/supervisor/conf.d/buildbot.conf
 
