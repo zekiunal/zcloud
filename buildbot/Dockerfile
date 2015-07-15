@@ -73,7 +73,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
 RUN pip install buildbot buildbot_slave
 
 # Set ssh superuser (username: admin   password: admin)
-RUN mkdir /data /var/RUN/sshd
+RUN mkdir /data /var/run/sshd
 RUN useradd -m -d /data/buildbot -p sa1aY64JOY94w admin
 RUN sed -Ei 's/adm:x:4:/admin:x:4:admin/' /etc/group
 RUN sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
