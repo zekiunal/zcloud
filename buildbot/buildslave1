@@ -1,0 +1,13 @@
+FROM debian:stable
+RUN apt-get update && apt-get install -y \
+   python-dev \
+   python-pip
+RUN pip install buildbot-slave
+RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
+RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
+# Install your build-dependencies here ...
+USER buildbot
+WORKDIR /buildslave
+RUN buildslave create-slave . localhost:9989 ulakbus-slave 3V6SBwag
+ENTRYPOINT ["/usr/local/bin/buildslave"]
+CMD ["start", "--nodaemon"]
