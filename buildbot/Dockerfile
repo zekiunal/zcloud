@@ -81,8 +81,10 @@ RUN sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 # Create buildbot configuration
 RUN cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 
-RUN cd /data/buildbot; sudo -u admin sh -c \
-    "buildslave create-slave ulakbus-slave localhost:9989 ulakbus-slave 3V6SBwag"
+# RUN cd /data/buildbot; sudo -u admin sh -c \
+#     "buildslave create-slave ulakbus-slave localhost:9989 ulakbus-slave 3V6SBwag"
+#     "buildslave create-slave ulakbus-ui-slave localhost:9989 ulakbus-slave YdybP9I4"
+#     "buildslave create-slave ulakbus-free-slave localhost:9989 ulakbus-slave q8J4fjJG"
 
 # Set supervisord buildbot and sshd processes
 RUN /bin/echo -e "[program:sshd]\ncommand=/usr/sbin/sshd -D\n" > \
@@ -91,11 +93,11 @@ RUN /bin/echo -e "\
 [program:buildmaster]\n\
 command=twistd --nodaemon --no_save -y buildbot.tac\n\
 directory=/data/buildbot/master\n\
-user=admin\n\n\
-[program:buildworker]\n\
-command=twistd --nodaemon --no_save -y buildbot.tac\n\
-directory=/data/buildbot/ulakbus-slave\n\
-user=admin\n" > \
+user=admin\n\n\ " > \
+# [program:buildworker]\n\
+# command=twistd --nodaemon --no_save -y buildbot.tac\n\
+# directory=/data/buildbot/ulakbus-slave\n\
+# user=admin\n" > \
     /etc/supervisor/conf.d/buildbot.conf
 
 # Setup running docker container buildbot process
