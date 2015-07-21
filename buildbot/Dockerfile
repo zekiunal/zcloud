@@ -70,7 +70,7 @@ RUN /bin/echo -e "\
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
     supervisor git sudo ssh
-RUN pip install buildbot buildbot_slave
+RUN pip install buildbot==0.9.0b1 buildbot_slave
 
 # Set ssh superuser (username: admin   password: admin)
 RUN mkdir /data /var/run/sshd
