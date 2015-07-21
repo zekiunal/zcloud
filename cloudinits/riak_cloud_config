@@ -4,6 +4,8 @@ users:
   - name: ali
     coreos-ssh-import-github: alirizakeles
 coreos:
+  update:
+    reboot-strategy: off
   etcd:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new
     discovery: https://discovery.etcd.io/895ab47daa1758089836d2a71dcd94d2
@@ -29,7 +31,7 @@ coreos:
       command: start
 
     # timezone settings. ntp use coreos default pools, just tune timezone
-    # https://coreos.com/docs/cluster-management/setup/configuring-date-and-timezone/ 
+    # https://coreos.com/docs/cluster-management/setup/configuring-date-and-timezone/
     - name: settimezone.service
       command: start
       content: |
@@ -40,20 +42,6 @@ coreos:
         ExecStart=/usr/bin/timedatectl set-timezone Europe/Istanbul
         RemainAfterExit=yes
         Type=oneshot
-
-    # not working for now, handle it manually.
-    # sudo sysctl vm.overcommit_memory=1
-    # https://github.com/coreos/coreos-cloudinit/issues/156
-    # 
-    # - name: systemd-sysctl.service
-    #   command: restart
-    #   content: |
-    #     [Unit]
-    #     Description=Update sysctl values written by cloud-config
-    #     [Service]
-    #     ExecStart=/usr/lib/systemd/systemd-sysctl vm.overcommit_memory=1
-    #
-
     - name: consul.service
       command: start
       content: |
@@ -92,3 +80,13 @@ coreos:
 
         ExecStop=/usr/bin/docker stop ${CONTAINER}
         ExecStopPost=-/usr/bin/etcdctl rm /consul.io/bootstrap/machines/%m
+      command: start
+    - name: mnt-data.mount
+      command: start
+      content: |
+        [Unit]
+        Description=Mount to /mnt/data
+        [Mount]
+        What=/dev/sdb1
+        Where=/mnt/data
+        Type=ext4
