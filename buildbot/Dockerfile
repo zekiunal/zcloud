@@ -93,12 +93,7 @@ RUN /bin/echo -e "\
 [program:buildmaster]\n\
 command=twistd --nodaemon --no_save -y buildbot.tac\n\
 directory=/data/buildbot/master\n\
-user=admin\n\n\ " > \
-# [program:buildworker]\n\
-# command=twistd --nodaemon --no_save -y buildbot.tac\n\
-# directory=/data/buildbot/ulakbus-slave\n\
-# user=admin\n" > \
-    /etc/supervisor/conf.d/buildbot.conf
+user=admin\n" > /etc/supervisor/conf.d/buildbot.conf
 
 # Setup running docker container buildbot process
 # Make host port 8010 match container port 8010
@@ -107,3 +102,4 @@ EXPOSE :8010
 # expose 22
 CMD ["/usr/bin/supervisord", "-n"]
 COPY master/master.cfg /data/buildbot/master/
+RUN buildbot start master
