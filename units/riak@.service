@@ -2,15 +2,26 @@
 Description=riak
 
 [Service]
-User=core
+Restart=on-failure
+TimeoutSec=15min
+#TimeoutStartSec=12min
+#TimeoutStopSec=15
+RestartSec=100s
+
+LimitNOFILE=65536
+
 ExecStartPre=-/usr/bin/docker kill riak-%i
 ExecStartPre=-/usr/bin/docker rm riak-%i
-ExecStartPre=/usr/bin/docker pull alirizakeles/riak:2.1.1-1
+ExecStartPre=/usr/bin/docker pull zetaops/riak:2.1.1-1
 
-ExecStart=/usr/bin/docker run --rm --name riak-%i -P -v /var/lib/riak:/home/ali/vols/riak/data -v /var/log/riak:/home/ali/vols/riak/log alirizakeles/riak:2.1.1-1
+ExecStartPre=/bin/bash -c 'IGNORED_PORTS=""; for ((i=11000; i<13000; i++)) do IGNORED_PORTS+="-e SERVICE_"$i"_IGNORE=true "; done; export IGNORED_PORTS'
+
+ExecStart=/bin/bash -c '/usr/bin/docker run -d -h $(hostname) --name riak-%i -p 8043:8043 -p 8087:8087 -p 8098:8098 -p 4369:4369 -p 11000-12999:11000-12999 -v /mnt/data/riak/data:/var/lib/riak -v /mnt/data/riak/log:/var/log/riak ${IGNORED_PORTS} zetaops/riak:2.1.1-1'
+
+
 ExecStop=/usr/bin/docker stop riak-%i
 
 [X-Fleet]
 Conflicts=riak@*.service
-MachineMetadata=clusterof=riak
+MachineMetadata=machineof=riak
 MachineMetadata=disk=ssd
