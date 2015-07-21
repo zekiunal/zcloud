@@ -63,10 +63,10 @@ from ubuntu:14.04
 
 # Install buildbot and its dependencies
 
-RUN /bin/echo -e "\
-    deb http://archive.ubuntu.com/ubuntu trusty main universe\n\
-    deb http://archive.ubuntu.com/ubuntu trusty-updates main universe" > \
-    /etc/apt/sources.list
+# RUN /bin/echo -e "\
+#     deb http://archive.ubuntu.com/ubuntu trusty main universe\n\
+#     deb http://archive.ubuntu.com/ubuntu trusty-updates main universe" > \
+#     /etc/apt/sources.list
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
     supervisor git sudo ssh
@@ -102,3 +102,4 @@ EXPOSE :8010
 # expose 22
 CMD ["/usr/bin/supervisord", "-n"]
 COPY master/master.cfg /data/buildbot/master/
+ENV SLAVE_IP 
