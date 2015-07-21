@@ -102,4 +102,4 @@ EXPOSE :8010
 # expose 22
 CMD ["/usr/bin/supervisord", "-n"]
 COPY master/master.cfg /data/buildbot/master/
-ENV SLAVE_IP 
+ENV SLAVE_IP "localhost"
