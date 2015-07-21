@@ -8,6 +8,6 @@ RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
 # Install your build-dependencies here ...
 USER buildbot
 WORKDIR /buildslave
-RUN buildslave create-slave . localhost:9989 ulakbus-slave 3V6SBwag
+RUN buildslave create-slave . tcp://10.240.162.132:9989 ulakbus-slave 3V6SBwag
 ENTRYPOINT ["/usr/local/bin/buildslave"]
 CMD ["start", "--nodaemon"]
