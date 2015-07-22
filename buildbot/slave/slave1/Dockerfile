@@ -9,7 +9,7 @@ RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
 USER buildbot
 WORKDIR /buildslave
 ENV MASTER_HOST 10.240.162.132
-COPY slave/create /buildslave/
+COPY create /buildslave/
 RUN chmod +x create && ./create
 ENTRYPOINT ["/usr/local/bin/buildslave"]
 CMD ["start", "--nodaemon"]
