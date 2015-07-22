@@ -1,7 +1,8 @@
 FROM debian:stable
 RUN apt-get update && apt-get install -y \
    python-dev \
-   python-pip
+   python-pip \
+   git
 RUN pip install buildbot-slave
 RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
 RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
