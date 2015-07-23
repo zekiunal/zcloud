@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM ubuntu:14.04
 RUN apt-get update && apt-get install -y \
    python-dev \
    python-pip \
@@ -12,10 +12,11 @@ RUN curl https://www.npmjs.com/install.sh | sh
 
 RUN node -v
 RUN npm -v
-
 RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
-#RUN sed -Ei 's/(\%buildbot ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
+#RUN sed -Ei 's/(\buildbot ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
+RUN echo 'buildbot ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
+RUN chown -R buildbot:buildbot /usr/local/
 # Install your build-dependencies here ...
 USER buildbot
 WORKDIR /buildslave
