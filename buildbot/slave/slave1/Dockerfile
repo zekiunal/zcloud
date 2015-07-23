@@ -7,6 +7,7 @@ RUN pip install buildbot-slave
 RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
 # RUN sed -Ei 's/(\%buildbot ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
+RUN chown -R buildbot:buildbot /usr/local/
 # Install your build-dependencies here ...
 USER buildbot
 WORKDIR /buildslave
