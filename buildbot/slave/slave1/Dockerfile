@@ -12,7 +12,7 @@ RUN chown -R buildbot:buildbot /usr/local/
 USER buildbot
 WORKDIR /buildslave
 ENV MASTER_HOST 10.240.162.132
-ENV PYOKO_SETTINGS 'tests.settings'
+ENV PYOKO_SETTINGS 'ulakbus.settings'
 ENV RIAK_SERVER '146.148.118.71'
 ENV RIAK_PORT '8098'
 ENV RIAK_PROTOCOL 'http'
