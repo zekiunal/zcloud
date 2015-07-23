@@ -6,6 +6,13 @@ RUN apt-get update && apt-get install -y \
    curl \
    nodejs
 RUN pip install buildbot-slave
+
+RUN update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100
+RUN curl https://www.npmjs.com/install.sh | sh
+
+RUN node -v
+RUN npm -v
+
 RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
 #RUN sed -Ei 's/(\%buildbot ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
