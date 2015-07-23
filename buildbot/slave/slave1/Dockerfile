@@ -13,7 +13,7 @@ USER buildbot
 WORKDIR /buildslave
 ENV MASTER_HOST 10.240.162.132
 ENV PYOKO_SETTINGS 'ulakbus.settings'
-ENV RIAK_SERVER '146.148.118.71'
+ENV RIAK_SERVER 'zx-lb-01.c.zetaops-academic-erp.internal'
 ENV RIAK_PORT '8098'
 ENV RIAK_PROTOCOL 'http'
 
