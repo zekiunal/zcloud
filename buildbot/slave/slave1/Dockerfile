@@ -2,9 +2,11 @@ FROM debian:stable
 RUN apt-get update && apt-get install -y \
    python-dev \
    python-pip \
-   git
+   git \
+   sudo
 RUN pip install buildbot-slave
 RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
+RUN sed -Ei 's/(\%buildbot ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
 # Install your build-dependencies here ...
 USER buildbot
