@@ -1,0 +1,1 @@
+buildslave create-slave . 10.240.162.132:9989 ulakbus-deploy-slave 3V6SBwag
