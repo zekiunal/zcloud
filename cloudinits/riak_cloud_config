@@ -8,7 +8,7 @@ coreos:
     reboot-strategy: off
   etcd:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new
-    discovery: https://discovery.etcd.io/895ab47daa1758089836d2a71dcd94d2
+    discovery: https://discovery.etcd.io/b7375b46435f1ae92bff071d65aa78a6
     # use $public_ipv4 if your datacenter of choice does not support private networking
     addr: $private_ipv4:4001
     peer-addr: $private_ipv4:7001
