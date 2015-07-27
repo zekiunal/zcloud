@@ -1,0 +1,21 @@
+[Unit]
+Description=buildbot master
+
+Requires=docker.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/etc/environment
+
+ExecStartPre=-/usr/bin/docker kill buildbot-master
+ExecStartPre=-/usr/bin/docker rm buildbot-master
+ExecStartPre=/usr/bin/docker pull zetaops/buildbot-master
+
+ExecStart=/usr/bin/docker run -d -h $(hostname -f) --name buildbot-master -e SLAVE_HOST=zx-buildbotslave.c.zetaops-academic-erp.internal -e SLAVE_DOCKER_PORT=2375 -p 8010:8010 -p 9989:9989 zetaops/buildbot-master
+
+ExecStop=/usr/bin/docker stop zetaops/buildbot-master
+
+[X-Fleet]
+MachineMetadata=machineof=app
+MachineMetadata=disk=ssd
