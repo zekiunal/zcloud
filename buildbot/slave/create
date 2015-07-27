@@ -1,0 +1,1 @@
+buildslave create-slave . localhost:9989 ulakbus-slave 3V6SBwag
