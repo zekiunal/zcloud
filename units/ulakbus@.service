@@ -16,7 +16,7 @@ ExecStartPre=-/usr/bin/docker kill ulakbus-%i
 ExecStartPre=-/usr/bin/docker rm ulakbus-%i
 ExecStartPre=/usr/bin/docker pull zetaops/ulakbus
 
-ExecStart=/usr/bin/docker run --name ulakbus-%i -e PYOKO_SETTINGS=ulakbus.settings -e RIAK_SERVER=zx8.c.zetaops-academic-erp.internal -e RIAK_PROTOCOL=http -e RIAK_PORT=8098 -e REDIS_SERVER=zx2.c.zetaops-academic-erp.internal:32784 -P zetaops/ulakbus
+ExecStart=/usr/bin/docker run --name ulakbus-%i -e PYOKO_SETTINGS=ulakbus.settings -e RIAK_SERVER=zx-lb-01.c.zetaops-academic-erp.internal -e RIAK_PROTOCOL=http -e RIAK_PORT=8098 -e REDIS_SERVER=zx-lb-01.c.zetaops-academic-erp.internal:6379 -P zetaops/ulakbus
 
 ExecStop=/usr/bin/docker stop ulakbus-%i
 
