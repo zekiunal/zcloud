@@ -1,10 +1,8 @@
 Ulakbus Buildbot Configuration Details
 
-
-
 docker build names for docker images
 
-master: zetaops/buildbot
+master: zetaops/buildbot-master
 ulakbus: zetaops/ulakbustestslave
 ulakbusui: zetaops/ulakbusuitestslave
 deploy: zetaops/deployslave
