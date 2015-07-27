@@ -20,7 +20,6 @@ RUN chown -R buildbot:buildbot /usr/local/
 # Install your build-dependencies here ...
 USER buildbot
 WORKDIR /buildslave
-ENV MASTER_HOST 10.240.162.132
 ENV PHANTOMJS_BIN /buildslave/runuitests/build/node_modules/phantomjs/bin/phantomjs
 COPY create /buildslave/
 RUN chmod +x create && ./create
