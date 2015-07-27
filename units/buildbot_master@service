@@ -19,3 +19,4 @@ ExecStop=/usr/bin/docker stop zetaops/buildbot-master
 [X-Fleet]
 MachineMetadata=machineof=app
 MachineMetadata=disk=ssd
+Conflicts=buildbot_master@service
