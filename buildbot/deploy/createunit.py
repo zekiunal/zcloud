@@ -22,7 +22,7 @@ def createUnit(unit):
 	newunit['name'] = unit + datetime.date.today().isoformat() + '.service'
 	newunit['desiredState'] = 'loaded'
 	newunit['options'] = getCurrentServiceOptions(unit)
-	unitcreate = requests.put(url+newunit['name'], data=json.dumps(newunit), headers=headers)
+	unitcreate = requests.put(url+'/'+newunit['name'], data=json.dumps(newunit), headers=headers)
 	return unitcreate.content
 
 if __name__ == '__main__':
