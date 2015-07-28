@@ -70,7 +70,8 @@ from ubuntu:14.04
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
     supervisor git sudo ssh
-RUN pip install six==1.6.1 docker-py buildbot==0.9.0b1 buildbot_www==0.9.0b1 buildbot_slave
+RUN pip install -e 'git+https://github.com/zetaops/buildbot.git#egg=buildbot&subdirectory=master'
+RUN pip install six==1.6.1 docker-py buildbot_www==0.9.0b1 buildbot_slave
 
 # Set ssh superuser (username: admin   password: admin)
 RUN mkdir /data /var/run/sshd
