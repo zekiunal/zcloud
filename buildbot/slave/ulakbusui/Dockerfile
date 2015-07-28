@@ -21,7 +21,7 @@ RUN chown -R buildbot:buildbot /usr/local/
 USER buildbot
 WORKDIR /buildslave
 ENV PHANTOMJS_BIN /buildslave/runuitests/build/node_modules/phantomjs/bin/phantomjs
-COPY create /buildslave/
-RUN chmod +x create && ./create
+COPY buildbot.tac /buildslave/
+#RUN chmod +x create && ./create
 ENTRYPOINT ["/usr/local/bin/buildslave"]
 CMD ["start", "--nodaemon"]

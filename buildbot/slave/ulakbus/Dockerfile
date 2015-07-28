@@ -17,7 +17,7 @@ ENV RIAK_SERVER 'zx-lb-01.c.zetaops-academic-erp.internal'
 ENV RIAK_PORT '8098'
 ENV RIAK_PROTOCOL 'http'
 
-COPY create /buildslave/
-RUN chmod +x create && ./create
+COPY buildbot.tac /buildslave/
+#RUN chmod +x create && ./create
 ENTRYPOINT ["/usr/local/bin/buildslave"]
 CMD ["start", "--nodaemon"]

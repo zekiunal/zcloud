@@ -9,7 +9,7 @@ RUN chown -R buildbot:buildbot /usr/local/
 USER buildbot
 WORKDIR /buildslave
 COPY createunit.py /buildslave/
-COPY create /buildslave/
-RUN chmod +x create && ./create
+COPY buildbot.tac /buildslave/
+#RUN chmod +x create && ./create
 ENTRYPOINT ["/usr/local/bin/buildslave"]
 CMD ["start", "--nodaemon"]
