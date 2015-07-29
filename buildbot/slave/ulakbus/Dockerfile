@@ -11,7 +11,6 @@ RUN chown -R buildbot:buildbot /usr/local/
 # Install your build-dependencies here ...
 USER buildbot
 WORKDIR /buildslave
-ENV MASTER_HOST 10.240.162.132
 ENV PYOKO_SETTINGS 'ulakbus.settings'
 ENV RIAK_SERVER 'zx-lb-01.c.zetaops-academic-erp.internal'
 ENV RIAK_PORT '8098'

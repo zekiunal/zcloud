@@ -27,8 +27,8 @@ def createServiceOptions(unitname):
 	return options
 
 def createUnit(unitname):
-	if unitname[-1] != '@':
-		raise Exception('unitname must end with @')
+	# if unitname[-1] != '@':
+	# 	raise Exception('unitname must end with @')
 	newunit = {}
 	newunit['name'] = incrementUnitName(unitname)
 	newunit['desiredState'] = 'loaded'
