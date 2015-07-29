@@ -6,9 +6,16 @@ set_listen_addresses() {
 	sed -ri "s/^#?(listen_addresses\s*=\s*)\S+/\1'$sedEscapedValue'/" "$PGDATA/postgresql.conf"
 }
 
-# add a replication user and allow
-gosu postgres psql -c "CREATE USER rep REPLICATION LOGIN CONNECTION LIMIT 1 ENCRYPTED PASSWORD '$REP_USER_PASSWD';"
-{ echo; echo 'host    replication     rep     '$REP_SERVER_IP'/32   md5' } >> $PGDATA/pg_hba.conf
+if [ -n "$REP_USER_PASSWD" ]; then
+	# add a replication user if this server is master, master server should be run
+	# with REP_USER_PASSWD env var
+	gosu postgres psql -c "CREATE USER rep REPLICATION LOGIN CONNECTION LIMIT 1 ENCRYPTED PASSWORD '$REP_USER_PASSWD';"
+fi
+
+if [ -n "$REP_SERVER_IP" ]; then
+	# allow replication user
+	{ echo; echo 'host    replication     rep     '$REP_SERVER_IP'/32   md5' } >> $PGDATA/pg_hba.conf
+fi
 
 # tune postgresql server for replication
 sed -ri "s/^#?(wal_level\s*=\s*)\S+/\1'hot_standby'/" "$PGDATA/postgresql.conf"
