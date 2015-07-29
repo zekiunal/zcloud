@@ -8,7 +8,7 @@ set_listen_addresses() {
 
 # add a replication user and allow
 gosu postgres psql -c "CREATE USER rep REPLICATION LOGIN CONNECTION LIMIT 1 ENCRYPTED PASSWORD '$REP_USER_PASSWD';"
-{ echo; echo 'host    replication     rep     IP_address_of_slave/32   md5' } >> $PGDATA/pg_hba.conf
+{ echo; echo 'host    replication     rep     '$REP_SERVER_IP'/32   md5' } >> $PGDATA/pg_hba.conf
 
 # tune postgresql server for replication
 sed -ri "s/^#?(wal_level\s*=\s*)\S+/\1'hot_standby'/" "$PGDATA/postgresql.conf"
