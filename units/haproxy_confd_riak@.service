@@ -1,0 +1,23 @@
+[Unit]
+Description=Confd with haproxy
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
+
+[Service]
+TimeoutStartSec=3min
+EnvironmentFile=/etc/environment
+Restart=always
+RestartSec=20s
+
+ExecStartPre=-/usr/bin/docker kill haproxy-confd-riak
+ExecStartPre=-/usr/bin/docker rm haproxy-confd-riak
+ExecStartPre=/usr/bin/docker pull zetaops/haproxy-confd-riak
+
+ExecStart=/bin/bash -c 'docker run --rm --name haproxy-confd-riak -p 8087:8087 -p 8098:8098 -e "ETCD_IP=$COREOS_PRIVATE_IPV4" zetaops/haproxy-confd-riak'
+
+ExecStop=/usr/bin/docker stop haproxy-confd-riak
+
+
+[X-Fleet]
+Conflicts=haproxy_confd_riak@*.service
+MachineMetadata=machineof=lb
+MachineMetadata=disk=ssd

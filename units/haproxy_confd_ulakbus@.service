@@ -1,0 +1,23 @@
+[Unit]
+Description=Confd with haproxy
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
+
+[Service]
+TimeoutStartSec=3min
+EnvironmentFile=/etc/environment
+Restart=always
+RestartSec=20s
+
+ExecStartPre=-/usr/bin/docker kill haproxy-confd-ulakbus
+ExecStartPre=-/usr/bin/docker rm haproxy-confd-ulakbus
+ExecStartPre=/usr/bin/docker pull zetaops/haproxy-confd-ulakbus
+
+ExecStart=/bin/bash -c 'docker run --rm --name haproxy-confd-ulakbus -p 9001:9001 -p 80:80 -e "ETCD_IP=$COREOS_PRIVATE_IPV4" zetaops/haproxy-confd-ulakbus'
+
+ExecStop=/usr/bin/docker stop haproxy-confd-ulakbus
+
+
+[X-Fleet]
+Conflicts=haproxy_confd_ulakbus@*.service
+MachineMetadata=machineof=lb
+MachineMetadata=disk=ssd
