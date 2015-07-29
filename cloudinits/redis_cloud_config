@@ -28,8 +28,8 @@ coreos:
             ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": "172.17.0.0/16" }'
       command: start
 
-    # timezone settings. ntp use coreos default pools, just tune timezone 
-    # https://coreos.com/docs/cluster-management/setup/configuring-date-and-timezone/ 
+    # timezone settings. ntp use coreos default pools, just tune timezone
+    # https://coreos.com/docs/cluster-management/setup/configuring-date-and-timezone/
     - name: settimezone.service
       command: start
       content: |
@@ -44,7 +44,7 @@ coreos:
     # not working for now, handle it manually.
     # sudo sysctl vm.overcommit_memory=1
     # https://github.com/coreos/coreos-cloudinit/issues/156
-    # 
+    #
     # - name: systemd-sysctl.service
     #   command: restart
     #   content: |
@@ -92,6 +92,15 @@ coreos:
 
         ExecStop=/usr/bin/docker stop ${CONTAINER}
         ExecStopPost=-/usr/bin/etcdctl rm /consul.io/bootstrap/machines/%m
+    - name: mnt-postgres.mount
+      command: start
+      content: |
+        [Unit]
+        Description=Mount to /mnt/postgres
+        [Mount]
+        What=/dev/sdb1
+        Where=/mnt/postgres
+        Type=ext4
 
 write_files:
   - path: /home/core/etc/environment
@@ -106,24 +115,24 @@ write_files:
     content: |
       #!/bin/bash
       # Walk through etcd keys including redis in /services directory
-      # we are not interested in container's ip address, we can discover service just with hostname and hostport  
+      # we are not interested in container's ip address, we can discover service just with hostname and hostport
       # hostname is part of key /services/redis/redis-t.c.zetaops-academic-erp.internal:redis_t:6379
       # hostport is part of value 172.17.0.3:49154
-      # as registrator2etcd write service informations 
+      # as registrator2etcd write service informations
       # first check masters, if exists a master, update etcd and make rest ones slave of this one.
       # check if exists masterless redises, then make one of it master and others slave of new master
       # elseif no redis remove etcd key
 
       make_master(){
           EXEC="docker run --name redis-cli --rm --env IP=\"$1\" --env PORT=\"$2\" redis sh -c 'exec redis-cli -h \$IP -p \$PORT slaveof no one'"
-          echo $EXEC # just for logs in journalctl 
+          echo $EXEC # just for logs in journalctl
           eval $EXEC
       }
 
       make_slave(){
           EXEC="docker run --name redis-cli --rm --env IP=\"$1\" --env PORT=\"$2\" redis sh -c 'exec redis-cli -h \$IP -p \$PORT slaveof $3 $4'"
           echo $EXEC # just for logs in journalctl
-          eval $EXEC    
+          eval $EXEC
       }
 
       e=0; f=0

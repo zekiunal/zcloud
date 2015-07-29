@@ -6,6 +6,25 @@ set_listen_addresses() {
 	sed -ri "s/^#?(listen_addresses\s*=\s*)\S+/\1'$sedEscapedValue'/" "$PGDATA/postgresql.conf"
 }
 
+if [ -n "$REP_USER_PASSWD" ]; then
+	# add a replication user if this server is master, master server should be run
+	# with REP_USER_PASSWD env var
+	gosu postgres psql -c "CREATE USER rep REPLICATION LOGIN CONNECTION LIMIT 1 ENCRYPTED PASSWORD '$REP_USER_PASSWD';"
+fi
+
+if [ -n "$REP_SERVER_IP" ]; then
+	# allow replication user
+	{ echo; echo 'host    replication     rep     '$REP_SERVER_IP'/32   md5' } >> $PGDATA/pg_hba.conf
+fi
+
+# tune postgresql server for replication
+sed -ri "s/^#?(wal_level\s*=\s*)\S+/\1'hot_standby'/" "$PGDATA/postgresql.conf"
+sed -ri "s/^#?(archive_mode\s*=\s*)\S+/\1'on'/" "$PGDATA/postgresql.conf"
+sed -ri "s/^#?(archive_command\s*=\s*)\S+/\1'cd \.'/" "$PGDATA/postgresql.conf"
+sed -ri "s/^#?(max_wal_senders\s*=\s*)\S+/\11/" "$PGDATA/postgresql.conf"
+sed -ri "s/^#?(hot_standby\s*=\s*)\S+/\1'on'/" "$PGDATA/postgresql.conf"
+
+
 if [ "$1" = 'postgres' ]; then
 	mkdir -p "$PGDATA"
 	chown -R postgres "$PGDATA"
@@ -30,7 +49,7 @@ if [ "$1" = 'postgres' ]; then
 				         This will allow anyone with access to the
 				         Postgres port to access your database. In
 				         Docker's default configuration, this is
-				         effectively any other container on the same
+				         effectively any 	other container on the same
 				         system.
 
 				         Use "-e POSTGRES_PASSWORD=password" to set

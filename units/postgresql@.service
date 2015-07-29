@@ -1,0 +1,29 @@
+[Unit]
+Description=postgres
+
+[Service]
+Restart=on-failure
+TimeoutSec=15min
+LimitNOFILE=65536
+
+ExecStartPre=-/usr/bin/docker kill postgres-master
+ExecStartPre=-/usr/bin/docker rm postgres-master
+ExecStartPre=/usr/bin/docker pull zetaops/postgres
+
+ExecStartPre=/bin/bash -c 'IGNORED_PORTS=""; for ((i=11000; i<13000; i++)) do IGNORED_PORTS+="-e SERVICE_"$i"_IGNORE=true "; done; export IGNORED_PORTS'
+
+ExecStart=/bin/bash -c '/usr/bin/docker run -h $(hostname) \
+                        --name postgres-master -P \
+                        -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
+                        -e POSTGRES_USER=$POSTGRES_USER \
+                        -e REP_USER_PASSWD=$REP_USER_PASSWD
+                        -e REP_SERVER_IP=$REP_SERVER_IP
+                        -v /mnt/postgres:/var/lib/postgresql/data zetaops/postgres'
+
+
+ExecStop=/usr/bin/docker stop postgres-master
+
+[X-Fleet]
+Conflicts=riak@*.service
+MachineMetadata=machineof=riak
+MachineMetadata=disk=ssd

@@ -1,0 +1,7 @@
+[template]
+src	= "haproxy.cfg"
+dest	= "/usr/local/etc/haproxy/haproxy.cfg"
+keys	= [
+    "/services/redis"
+]
+reload_cmd 	= "haproxy -V -f /usr/local/etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -d -D -sf $(cat /var/run/haproxy.pid)"
