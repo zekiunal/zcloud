@@ -25,6 +25,7 @@ apt-get install wget
 
 # Get riak.conf from zetaops public cloud tools
 wget https://raw.githubusercontent.com/zetaops/zcloud/master/containers/riak/conf/riak.conf -O /etc/riak/riak.conf
+wget https://raw.githubusercontent.com/zetaops/zcloud/master/containers/riak/conf/advanced.config -O /etc/riak/advanced.config 
 chown riak:riak /etc/riak/riak.conf && chmod 755 /etc/riak/riak.conf
 
 # Get Certificate Files
