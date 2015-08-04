@@ -68,3 +68,9 @@ for i in ${nodes[@]}; do
      fi
    fi
 done
+
+# create 5 node riak instance based on ubuntu and join cluster on gce platform
+# for ((i=1; i<6; i++)) do gcloud -q compute instances create  \
+# --zone europe-west1-d --image=ubuntu-14-04 --machine-type "n1-standard-2" \
+# --can-ip-forward zx-ubuntu-riak-0$i \
+# --metadata-from-file startup-script=ubuntu_riak.sh; done
