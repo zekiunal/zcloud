@@ -5,8 +5,10 @@ MAINTAINER='Ali Riza Keles, alirza@zetaops.io'
 export DEBIAN_FRONTEND='noninteractive'
 RIAK_VERSION='2.1.1-1'
 IP_ADDRESS=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-STRONG_CONSISTENCY='on'
-RIAK_CONTROL='off'
+
+# if strong consistency and riak control are unset, set them to defaults
+: ${STRONG_CONSISTENCY:='on'}
+: ${RIAK_CONTROL:='off'}
 
 # Install Java 8
 apt-get update -qq && apt-get install -y software-properties-common && \
@@ -25,7 +27,7 @@ apt-get install wget
 
 # Get riak.conf from zetaops public cloud tools
 wget https://raw.githubusercontent.com/zetaops/zcloud/master/containers/riak/conf/riak.conf -O /etc/riak/riak.conf
-wget https://raw.githubusercontent.com/zetaops/zcloud/master/containers/riak/conf/advanced.config -O /etc/riak/advanced.config 
+wget https://raw.githubusercontent.com/zetaops/zcloud/master/containers/riak/conf/advanced.config -O /etc/riak/advanced.config
 chown riak:riak /etc/riak/riak.conf && chmod 755 /etc/riak/riak.conf
 
 # Get Certificate Files
