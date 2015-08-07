@@ -16,7 +16,7 @@ RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
     supervisor git sudo ssh
 RUN git clone https://github.com/zetaops/buildbot.git
-RUN cd buildbot/master && sudo python setup.py install
+RUN cd buildbot/master && python setup.py build && python setup.py install
 RUN pip install six==1.6.1 docker-py buildbot_www==0.9.0b1 buildbot_slave
 
 # Set ssh superuser (username: admin   password: admin)
@@ -26,7 +26,8 @@ RUN sed -Ei 's/adm:x:4:/admin:x:4:admin/' /etc/group
 RUN sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 
 # Create buildbot configuration
-RUN cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
+RUN cd /data/buildbot; buildbot create-master master
+RUN chown -R admin:admin /data/buildbot/master
 
 # RUN cd /data/buildbot; sudo -u admin sh -c \
 #     "buildslave create-slave ulakbus-slave localhost:9989 ulakbus-slave 3V6SBwag"
