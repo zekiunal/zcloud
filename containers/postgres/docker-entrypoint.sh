@@ -18,11 +18,11 @@ if [ -n "$REP_SERVER_IP" ]; then
 fi
 
 # tune postgresql server for replication
-sed -ri "s/^#?(wal_level\s*=\s*)\S+/\1'hot_standby'/" "$PGDATA/postgresql.conf"
-sed -ri "s/^#?(archive_mode\s*=\s*)\S+/\1'on'/" "$PGDATA/postgresql.conf"
-sed -ri "s/^#?(archive_command\s*=\s*)\S+/\1'cd \.'/" "$PGDATA/postgresql.conf"
-sed -ri "s/^#?(max_wal_senders\s*=\s*)\S+/\11/" "$PGDATA/postgresql.conf"
-sed -ri "s/^#?(hot_standby\s*=\s*)\S+/\1'on'/" "$PGDATA/postgresql.conf"
+# sed -ri "s/^#?(wal_level\s*=\s*)\S+/\1'hot_standby'/" "$PGDATA/postgresql.conf"
+# sed -ri "s/^#?(archive_mode\s*=\s*)\S+/\1'on'/" "$PGDATA/postgresql.conf"
+# sed -ri "s/^#?(archive_command\s*=\s*)\S+/\1'cd \.'/" "$PGDATA/postgresql.conf"
+# sed -ri "s/^#?(max_wal_senders\s*=\s*)\S+/\11/" "$PGDATA/postgresql.conf"
+# sed -ri "s/^#?(hot_standby\s*=\s*)\S+/\1'on'/" "$PGDATA/postgresql.conf"
 
 
 if [ "$1" = 'postgres' ]; then

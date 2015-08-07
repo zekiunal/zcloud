@@ -1,0 +1,29 @@
+[Unit]
+Description=Postgres
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/redis-service.md
+After=docker.service
+Requires=docker.service
+After=etcd.service
+Requires=etcd.service
+
+[Service]
+TimeoutStartSec=3min
+RestartSec=20sec
+EnvironmentFile=/etc/environment
+Restart=on-failure
+ExecStartPre=-/usr/bin/docker kill postgres
+ExecStartPre=-/usr/bin/docker rm postgres
+ExecStartPre=/usr/bin/docker pull postgres
+# retrieve psql passwd from etcd, if set
+# or create a new psql password
+# start new postgres service
+# add etcd keys after start
+ExecStart=/bin/bash -c 'POSTGRES_PASSWORD=$(if etcdctl get /zaerp/envs/POSTGRES_PASSD > /dev/null 2>&1; then etcdctl get /zaerp/envs/POSTGRES_PASSD; else etcdctl set /zaerp/envs/POSTGRES_PASSD `openssl rand -base64 32`; fi;); docker run --name postgres --hostname %H -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD  -e POSTGRES_USER=zato -v /mnt/postgres:/var/lib/postgresql/data -P postgres; sleep 3'
+ExecStartPost=/bin/bash -c "sleep 5; etcdctl set /zaerp/envs/POSTGRES %H:`docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}}{{(index $conf 0).HostPort}}{{end}}' postgres`;"
+ExecStop=/bin/bash -c "/usr/bin/docker stop postgres; etcdctl rm /zaerp/envs/POSTGRES;"
+
+[X-Fleet]
+Conflicts=postgres.service
+# open this service only postgres machine
+MachineMetadata=machineof=redis
+MachineMetadata=postgres=true

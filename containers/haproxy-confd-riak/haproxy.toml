@@ -2,7 +2,8 @@
 src	= "haproxy.cfg"
 dest	= "/usr/local/etc/haproxy/haproxy.cfg"
 keys	= [
-    "/services/riak-8087",
-    "/services/riak-8098"
+    "/zaerp/riak-servers-8087",
+    "/zaerp/riak-servers-8098",
+    "/zaerp/riak-servers-8093"
 ]
 reload_cmd 	= "haproxy -V -f /usr/local/etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -d -D -sf $(cat /var/run/haproxy.pid)"

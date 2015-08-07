@@ -12,7 +12,7 @@ coreos:
     peer-addr: $private_ipv4:7001
   fleet:
     public-ip: $private_ipv4   # used for fleetctl ssh command
-    metadata: project=zaerp,disk=ssd,machineof=redis
+    metadata: project=zaerp,disk=ssd,machineof=redis,postgres=true
   flannel:
     interface: $private_ipv4
   units:
@@ -92,7 +92,16 @@ coreos:
 
         ExecStop=/usr/bin/docker stop ${CONTAINER}
         ExecStopPost=-/usr/bin/etcdctl rm /consul.io/bootstrap/machines/%m
-        
+    - name: mnt-postgres.mount
+      command: start
+      content: |
+        [Unit]
+        Description=Mount to /mnt/postgres
+        [Mount]
+        What=/dev/sdb1
+        Where=/mnt/postgres
+        Type=ext4
+
 write_files:
   - path: /home/core/etc/environment
     permissions: 0755
