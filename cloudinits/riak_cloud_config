@@ -14,7 +14,7 @@ coreos:
     peer-addr: $private_ipv4:7001
   fleet:
     public-ip: $private_ipv4   # used for fleetctl ssh command
-    metadata: zaerp,machineof=riak,disk=ssd
+    metadata: project=zaerp,machineof=riak,disk=ssd
   flannel:
     interface: $private_ipv4
   units:
