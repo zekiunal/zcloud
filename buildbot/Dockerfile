@@ -15,9 +15,7 @@ RUN /bin/echo -e "\
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
     supervisor git sudo ssh
-RUN git clone https://github.com/zetaops/buildbot.git
-RUN cd buildbot/master && python setup.py build && python setup.py install
-RUN pip install six==1.6.1 docker-py buildbot_www==0.9.0b1 buildbot_slave
+RUN pip install six==1.6.1 docker-py buildbot==0.9.0b1 buildbot_www==0.9.0b1 buildbot_slave
 
 # Set ssh superuser (username: admin   password: admin)
 RUN mkdir /data /var/run/sshd
@@ -26,8 +24,7 @@ RUN sed -Ei 's/adm:x:4:/admin:x:4:admin/' /etc/group
 RUN sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 
 # Create buildbot configuration
-RUN cd /data/buildbot; buildbot create-master master
-RUN chown -R admin:admin /data/buildbot/master
+RUN cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 
 # RUN cd /data/buildbot; sudo -u admin sh -c \
 #     "buildslave create-slave ulakbus-slave localhost:9989 ulakbus-slave 3V6SBwag"
@@ -49,4 +46,5 @@ EXPOSE :8010
 # Expose container port 22 to a random port in the host.
 # expose 22
 CMD ["/usr/bin/supervisord", "-n"]
+COPY master/docker.py /usr/local/lib/python2.7/dist-packages/buildbot/buildslave/docker.py
 COPY master/master.cfg /data/buildbot/master/
