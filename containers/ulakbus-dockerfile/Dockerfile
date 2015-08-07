@@ -21,9 +21,6 @@ RUN pip install git+git://github.com/didip/beaker_extensions.git
 # Open ports for HTTP and Protocol Buffers
 EXPOSE 9001
 
-# Enable insecure SSH key
-# See: https://github.com/phusion/baseimage-docker#using_the_insecure_key_for_one_container_only
-RUN /usr/sbin/enable_insecure_key
 
 RUN mkdir -p /etc/service/app
 ADD app.sh /etc/service/app/run
