@@ -3,7 +3,7 @@ Description=Confd with haproxy
 Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
 
 [Service]
-TimeoutStartSec=3min
+TimeoutStartSec=0
 EnvironmentFile=/etc/environment
 Restart=always
 RestartSec=20s
@@ -18,6 +18,6 @@ ExecStop=/usr/bin/docker stop haproxy-confd-elk
 
 
 [X-Fleet]
-Conflicts=haproxy-confd-elk@*.service
+Conflicts=haproxy_confd_elk@*.service
 MachineMetadata=machineof=lb
 MachineMetadata=disk=ssd
