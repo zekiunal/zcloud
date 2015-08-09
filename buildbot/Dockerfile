@@ -31,6 +31,9 @@ RUN cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 #     "buildslave create-slave ulakbus-ui-slave localhost:9989 ulakbus-slave YdybP9I4"
 #     "buildslave create-slave ulakbus-free-slave localhost:9989 ulakbus-slave q8J4fjJG"
 
+COPY master/docker.py /usr/local/lib/python2.7/dist-packages/buildbot/buildslave/docker.py
+COPY master/master.cfg /data/buildbot/master/
+
 # Set supervisord buildbot and sshd processes
 RUN /bin/echo -e "[program:sshd]\ncommand=/usr/sbin/sshd -D\n" > \
     /etc/supervisor/conf.d/sshd.conf
@@ -46,5 +49,3 @@ EXPOSE :8010
 # Expose container port 22 to a random port in the host.
 # expose 22
 CMD ["/usr/bin/supervisord", "-n"]
-COPY master/docker.py /usr/local/lib/python2.7/dist-packages/buildbot/buildslave/docker.py
-COPY master/master.cfg /data/buildbot/master/
