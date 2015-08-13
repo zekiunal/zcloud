@@ -1,11 +1,11 @@
-FROM ubuntu:14.04
+FROM phusion/baseimage:0.9.17
 RUN apt-get update && apt-get install -y \
    python-dev \
    python-pip \
    git \
    curl \
    nodejs
-RUN pip install buildbot-slave
+RUN pip install twisted==15.2.1 buildbot-slave
 
 RUN update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100
 RUN curl https://www.npmjs.com/install.sh | sh

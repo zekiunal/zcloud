@@ -2,7 +2,7 @@ FROM debian:stable
 RUN apt-get update && apt-get install -y \
    python-dev \
    python-pip
-RUN pip install buildbot-slave requests
+RUN pip install twisted==15.2.1 buildbot-slave requests
 RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
 RUN mkdir /buildslave && chown buildbot:buildbot /buildslave
 RUN chown -R buildbot:buildbot /usr/local/
