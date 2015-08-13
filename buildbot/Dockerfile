@@ -6,7 +6,7 @@
 # # Browse the url localhost:8010
 # # Log into container  (username: admin   password: admin)
 # ssh -p $(docker port $CONTAINER_ID 22 | cut -d: -f 2) admin@localhost
-from ubuntu:14.04
+from phusion/baseimage:0.9.17
 
 RUN /bin/echo -e "\
     deb http://archive.ubuntu.com/ubuntu trusty main universe\n\
@@ -18,7 +18,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
 RUN pip install six==1.6.1 autobahn==0.10.4 twisted==15.2.1 docker-py buildbot==0.9.0b1 buildbot_www==0.9.0b1 buildbot_slave
 
 # Set ssh superuser (username: admin   password: admin)
-RUN mkdir /data /var/run/sshd
+RUN mkdir /data 
+# RUN mkdir /var/run/sshd
 RUN useradd -m -d /data/buildbot -p sa1aY64JOY94w admin
 RUN sed -Ei 's/adm:x:4:/admin:x:4:admin/' /etc/group
 RUN sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
