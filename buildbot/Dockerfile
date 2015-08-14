@@ -28,6 +28,7 @@ RUN sed -Ei 's/adm:x:4:/admin:x:4:admin/' /etc/group
 RUN sed -Ei 's/(\%admin ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
 
 # Create buildbot configuration
+RUN chmod 777 /root
 RUN cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 
 # RUN cd /data/buildbot; sudo -u admin sh -c \
