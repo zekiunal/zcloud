@@ -20,7 +20,7 @@ RUN chown -R buildbot:buildbot /usr/local/
 # Install your build-dependencies here ...
 USER buildbot
 WORKDIR /buildslave
-ENV PHANTOMJS_BIN /buildslave/runuitests/build/node_modules/phantomjs/bin/phantomjs
+ENV PHANTOMJS_BIN /buildslave/runuitests/build/node_modules/karma-phantomjs-launcher/node_modules/phantomjs/bin/phantomjs
 COPY buildbot.tac /buildslave/
 #RUN chmod +x create && ./create
 ENTRYPOINT ["/usr/local/bin/buildslave"]
