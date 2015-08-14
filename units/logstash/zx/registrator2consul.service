@@ -1,0 +1,25 @@
+[Unit]
+Description=Registrator Consul
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
+After=consul.service
+Requires=consul.service
+After=etcd.service
+Requires=etcd.service
+After=docker.service
+Requires=docker.service
+Wants=ncat_registrator2consul.service
+Before=ncat_registrator2consul.service
+
+[Service]
+TimeoutStartSec=3min
+RestartSec=20sec
+EnvironmentFile=/etc/environment
+Restart=on-failure
+ExecStartPre=-/usr/bin/docker kill registrator-consul
+ExecStartPre=-/usr/bin/docker rm registrator-consul
+ExecStartPre=/usr/bin/docker pull gliderlabs/registrator:latest
+ExecStart=/bin/bash -c 'docker run --name registrator-consul --hostname %H -v /var/run/docker.sock:/tmp/docker.sock gliderlabs/registrator:latest consul://${COREOS_PRIVATE_IPV4}:8500'
+ExecStop=/usr/bin/docker stop registrator-consul
+
+[X-Fleet]
+Global=true

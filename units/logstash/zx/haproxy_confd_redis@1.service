@@ -1,0 +1,21 @@
+[Unit]
+Description=Confd with haproxy
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
+Wants=ncat_haproxy_confd_redis@*.service
+Before=ncat_haproxy_confd_redis@*.service
+
+[Service]
+TimeoutStartSec=3min
+EnvironmentFile=/etc/environment
+Restart=always
+RestartSec=20s
+ExecStartPre=-/usr/bin/docker kill haproxy-confd-redis
+ExecStartPre=-/usr/bin/docker rm haproxy-confd-redis
+ExecStartPre=/usr/bin/docker pull zetaops/haproxy-confd-redis
+ExecStart=/bin/bash -c 'docker run --rm --name haproxy-confd-redis -p 6379:6379 -e "ETCD_IP=$COREOS_PRIVATE_IPV4" zetaops/haproxy-confd-redis'
+ExecStop=/usr/bin/docker stop haproxy-confd-redis
+
+[X-Fleet]
+Conflicts=haproxy_confd_redis@*.service
+MachineMetadata=machineof=lb
+MachineMetadata=disk=ssd

@@ -1,0 +1,14 @@
+[Unit]
+Description=Redis Logstash Service
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/redis-service.md
+
+Requires=redis_cluster@*.service
+BindsTo=redis_cluster@*.service
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/bash -c 'journalctl -o short -u redis_cluster@*.service -f | ncat zx-logging-01.c.zetaops-academic-erp.internal 5301'
+
+X-Fleet]
+MachineMetadata=machineof=redis
+Conflicts=redis_cluster@*.service

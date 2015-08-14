@@ -1,0 +1,15 @@
+[Unit]
+Description=haproxy_confd_redis logstash service
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
+
+Requires=haproxy_confd_redis@*.service
+BindsTo=haproxy_confd_redis@*.service
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/bash -c 'journalctl -o short -u haproxy_confd_redis@*.service -f | ncat zx-logging-01.c.zetaops-academic-erp.internal 5301'
+
+[X-Fleet]
+Conflicts=haproxy_confd_redis@*.service
+MachineMetadata=machineof=lb
+MachineMetadata=disk=ssd

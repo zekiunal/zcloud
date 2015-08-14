@@ -1,0 +1,12 @@
+[Unit]
+Description=Registrator Etcd Logstash Service
+
+Requires=registrator2etcd.service
+BindsTo=registrator2etcd.service
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/bash -c 'journalctl -o short -u registrator2etcd.service -f | ncat zx-logging-01.c.zetaops-academic-erp.internal 5301'
+
+[X-Fleet]
+Global=true

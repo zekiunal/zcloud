@@ -1,0 +1,13 @@
+[Unit]
+Description=Registrator Consul Logstash Service
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
+
+Requires=registrator2consul.service
+BindsTo=registrator2consul.service
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/bash -c 'journalctl -o short -u registrator2consul.service -f | ncat zx-logging-01.c.zetaops-academic-erp.internal 5301'
+
+[X-Fleet]
+Global=true

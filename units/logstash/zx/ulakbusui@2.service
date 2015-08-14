@@ -1,0 +1,22 @@
+[Unit]
+Description=ulakbus-ui
+Requires=etcd.service
+Requires=docker.service
+After=etcd.service
+After=docker.service
+Wants=ncat_ulakbusui@*.service
+Before=ncat_ulakbusui@*.service
+
+[Service]
+TimeoutStartSec=0
+KillMode=none
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill ulakbusui-%i
+ExecStartPre=-/usr/bin/docker rm ulakbusui-%i
+ExecStartPre=/usr/bin/docker pull zetaops/ulakbus-ui
+ExecStart=/usr/bin/docker run --name ulakbusui-%i -P zetaops/ulakbus-ui
+ExecStop=/usr/bin/docker stop ulakbusui-%i
+
+[X-Fleet]
+MachineMetadata=machineof=app
+MachineMetadata=disk=ssd
