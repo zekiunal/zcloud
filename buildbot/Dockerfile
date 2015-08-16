@@ -13,8 +13,7 @@ RUN /bin/echo -e "\
     deb http://archive.ubuntu.com/ubuntu trusty-updates main universe" > \
     /etc/apt/sources.list
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev \
-    supervisor git sudo ssh python-psycopg2
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev supervisor git wget python-psycopg2
 RUN pip install autobahn==0.10.4 twisted==15.2.1 docker-py
 RUN easy_install --upgrade six
 RUN git clone https://github.com/buildbot/buildbot && cd buildbot/master && python setup.py install
