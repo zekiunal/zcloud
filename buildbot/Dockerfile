@@ -37,11 +37,14 @@ RUN cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 #     "buildslave create-slave ulakbus-free-slave localhost:9989 ulakbus-slave q8J4fjJG"
 
 COPY master/docker.py /usr/local/lib/python2.7/dist-packages/buildbot/buildslave/docker.py
-COPY master/master.cfg /data/buildbot/master/
+# COPY master/master.cfg /data/buildbot/master/
 
 # Set supervisord buildbot and sshd processes
 # RUN /bin/echo -e "[program:sshd]\ncommand=/usr/sbin/sshd -D\n" > \
 #     /etc/supervisor/conf.d/sshd.conf
+RUN /bin/echo -e "[program:wget]\n\
+command=wget https://raw.githubusercontent.com/zetaops/zcloud/master/buildbot/master/master.cfg -P /data/buildbot/master/\n" > \
+    /etc/supervisor/conf.d/wget.conf
 RUN /bin/echo -e "\
 [program:buildmaster]\n\
 command=twistd --nodaemon --no_save -y buildbot.tac\n\
