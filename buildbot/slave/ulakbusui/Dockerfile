@@ -1,11 +1,11 @@
-FROM ubuntu:14.04
+FROM phusion/baseimage:0.9.17
 RUN apt-get update && apt-get install -y \
    python-dev \
    python-pip \
    git \
    curl \
    nodejs
-RUN pip install buildbot-slave
+RUN pip install twisted==15.2.1 buildbot-slave
 
 RUN update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100
 RUN curl https://www.npmjs.com/install.sh | sh
@@ -20,7 +20,7 @@ RUN chown -R buildbot:buildbot /usr/local/
 # Install your build-dependencies here ...
 USER buildbot
 WORKDIR /buildslave
-ENV PHANTOMJS_BIN /buildslave/runuitests/build/node_modules/phantomjs/bin/phantomjs
+ENV PHANTOMJS_BIN /buildslave/runuitests/build/node_modules/karma-phantomjs-launcher/node_modules/phantomjs/bin/phantomjs
 COPY buildbot.tac /buildslave/
 #RUN chmod +x create && ./create
 ENTRYPOINT ["/usr/local/bin/buildslave"]

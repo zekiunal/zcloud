@@ -28,7 +28,7 @@ except ImportError:
 
 buildmaster_host = os.getenv('MASTER_HOST')
 port = 9989
-slavename = 'ulakbus-deploy-slave'
+slavename = 'ulakbus-ui-test-slave'
 passwd = '3V6SBwag'
 keepalive = 600
 usepty = 0
