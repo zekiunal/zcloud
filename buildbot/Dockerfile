@@ -47,6 +47,7 @@ command=wget https://raw.githubusercontent.com/zetaops/zcloud/master/buildbot/ma
 RUN /bin/echo -e "\
 [program:buildmaster]\n\
 command=twistd --nodaemon --no_save -y buildbot.tac\n\
+startsecs=30\n\
 directory=/data/buildbot/master\n\
 user=admin\n" > \
 	/etc/supervisor/conf.d/buildbot.conf
