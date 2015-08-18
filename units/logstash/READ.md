@@ -7,7 +7,7 @@ We do this by two stages
 ```bash
 BindsTo=buildbot_master.service
 ```
--Second, if buildbot_master.service dies , our service doesn't die, so wee need to add to buildbot_master.service below lines. 
+- Second, if buildbot_master.service dies , our service doesn't die, so wee need to add to buildbot_master.service below lines. 
 
 ```bash
 
