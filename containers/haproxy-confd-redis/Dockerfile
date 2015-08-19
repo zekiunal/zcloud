@@ -25,6 +25,27 @@ ADD haproxy.cfg /etc/confd/templates/haproxy.cfg
 ADD haproxy.toml /etc/confd/conf.d/haproxy.toml
 ADD configuration.toml /etc/confd/confd.toml
 
+
+################# RSYSLOG #################
+
+# Installation
+
+RUN apt-get update \
+        && apt-get install -y rsyslog \
+        && && rm -rf /var/lib/apt/lists/*
+
+# Rsyslog configuration
+
+COPY ./rsyslog/rsyslog.conf /etc/rsyslog.conf
+COPY ./rsyslog/rsyslog.d/haproxy.conf /etc/rsyslog.d/haproxy.conf
+
+# Restart rsyslog daemon
+
+RUN service rsyslog restart
+
+##########################################
+
+
 COPY entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
