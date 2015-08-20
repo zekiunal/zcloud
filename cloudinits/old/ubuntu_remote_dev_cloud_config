@@ -1,0 +1,98 @@
+#cloud-config
+# Update apt database on first boot
+# (ie run apt-get update)
+#
+# Default: true
+# Aliases: apt_update
+package_update: true
+
+# Upgrade the instance on first boot
+# (ie run apt-get upgrade)
+#
+# Default: false
+# Aliases: apt_upgrade
+package_upgrade: true
+
+# Reboot after package install/update if necessary
+# Default: false
+# Aliases: apt_reboot_if_required
+package_reboot_if_required: true
+
+packages:
+ - pwgen
+ - pastebinit
+ - git
+ - tig
+ - htop
+ - virtualenvwrapper
+ - python-dev
+ - libffi-dev
+ - ipython
+ - libffi-dev
+ - libssl-dev
+
+# run commands
+# default: none
+# runcmd contains a list of either lists or a string
+# each item will be executed in order at rc.local like level with
+# output to the console
+# - if the item is a list, the items will be properly executed as if
+#   passed to execve(3) (with the first arg as the command).
+# - if the item is a string, it will be simply written to the file and
+#   will be interpreted by 'sh'
+#
+# Note, that the list has to be proper yaml, so you have to escape
+# any characters yaml would eat (':' can be problematic)
+runcmd:
+ - [ ls, -l, / ]
+
+# set the locale to a given locale
+# default: en_US.UTF-8
+locale: en_US.UTF-8
+# render template default-locale.tmpl to locale_configfile
+locale_configfile: /etc/default/locale
+
+# timezone: set the timezone for this instance
+# the value of 'timezone' must exist in /usr/share/zoneinfo
+timezone: Europe/Istanbul
+
+users:
+  - default
+  - name: ali
+    primary-group: ali
+    groups: adm, sudo, dip, video, plugdev, users
+    lock-passwd: true
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC7IH7lgAqJBJ9n+Citn9p+RiDsgSVgnt7ihrtu1obDxnZRiHeWWyDPbZODRndAiMmrsxFOk1NbPenywh+OjnsdDLyNtlt4d2xRmPC2Fh7b908bSpKw83+FxwzahpA10kwJ2klKgpa+9eNGKss7g/SNusqy/XMtBq66v7C7m2tajtIVRm8U+KJlSvapgiKrtZKj87gBnR/dl6zYER9uEAL+eh19PCczltQtV+NkJFQnizGzrQJECfmJRMtkWj03nMXJdRFki00kWAsd8Ws1v4oweM28jSnKwGYxcotWZ0dabTmgtrlxCftmAtOwhaKFfHjawSOhI9wa/zL222qVbh3
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDI4C3CMo7hh/ZTgRDAFcErvZUnNwph7YyChFTLAqE7wDxke9NkWc3MumD3GMOZlA/dyxpXf8SdPLjqD7VJHeBeaszAS12TNPSNTBekpKu5PEjfcKaobB26x6YzxU+KhfuqTEDolVFydawxH5y0fQb5YXiFa7SvHGizyO/eAl2QhKFo+ICVRk5abwbgFKJUraHGcleiw95hs+y2Uh9D3mrXYIrRHrtJFdUPm12qCiMt9U4VO0S90C/FUDTWycrqEZ3B1Ed6KufICaFMmCf2cTpCta5sBeo51VrsyyOjwco0JWNuB+PjAooeZg7YdDciXO0rlByx0T3IoaweS88RsUUuyWTRWB90w3EFI2GBk3e/G3VoUuNzb+TPdRZrKLkagP/C/M6Nk2E47SZslF3MAVEnv978xHyrL4HfX7bnGBFcqFRkBuZSdCm576QI925SmsZr9mE2y134pm1ugu3BcDVFzpfRdRlM5N+L9nF3GCSPF/dbtN9Gfj9JrWbsM28impAPS3CAHCBQq1HRms+XZAHwGzGS1TTNw/3gkcWkopSesyCwEuwmZQZBeLt3JS0tCmpHCvYqTXMpMYrqln5hTTKKz7Qe7tLTHeTtcTolFIta8cC+xdWLVMfJUYaMcMrF4sJqmHQUQpIHYYFhZYBzrzzCHKfmE8zUQJ+qiqa0/qTjnw==
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDaBKc7nRaYHB+CLwY0Dk8iW4wu35DOuxSYX26YPpmXH30l7eRzNrHluM+RE3DuMX3ng0ueWhGW4/kHTcnVUXzIG87v5Jjjbz6D7uj2f5fp7Gryfzv5SfhrxIEorTnWDzBB5nN5aaw+wbGS3e4ybc5q6BEuj1m5Of1K2QtfDhhB3bGiTj6xKVGXXW6kAbjL1afeCUAqoOUz6d/t/eqPRZxyAeb0lSNCjWC5yNyZ0t+U65VxboNpqAJLm5A6N7WwN4sa9xJwE422wTl3KKljLsN+7LfnJrmie/f53/bdl5Tax0fzH6XufDrvxFVE69NESgGnTkwq7YD1UtL2a3zex8hj
+    sudo: "ALL=NOPASSWD: ALL"
+  - name: kunthar
+    primary-group: kunthar
+    groups: adm, sudo, dip, video, plugdev, users
+    lock-passwd: true
+    ssh-authorized-keys:
+      - ssh-dss AAAAB3NzaC1kc3MAAACBAPdevAqVaMVf+fFwXHJxCzP7bgLTD1Z0nX5GZ+/Hvzh9DCIXi9GUlz6IUL50U4Ey+CoU9gqFPyedvjdwxLfg+7MJlPPHThihxgUgW1nEwVutAR8VEx5WRPi1aNTOHP8Juf5b1Am7CZVitMYpYyVjxDlKbxMGrgfsZ46nLZm9bYFxAAAAFQDRLgC+FwJfBDiOnOyiciO17CX+gwAAAIEAjBLKSOsGAF6TlggmWOYmoQfGl0ACW+8INideSgxIUu+SBpbtYmecbv0qILS5aoPM+CRN2xlOVZ0NByENDWWGab+eL/G9VtVGcUAEzSHe4JhTlxKOctym8MyQmVIOpTkvLGuImpXCSkkLCMEhcH46lALhwhAx+N1B8EpQIzIVVa4AAACASkwz0prLmHEo7jy6HYp1fZGsoxLc4zKdR8qsMcfDuLYfiX4eBSm3ysOlEUJ2mTK7VEfsmRZGS6kSRmbd5XYo8FRd9UcK2sPMErpCzIdncyyOiyx/6jSdPgsJVuA2I/fPfDDF7tQbic/K/srNRUTikOM5VHrH8pabVQ4FBsTiXoY=
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8yfOjM8ANSIqrmYAPF1zvA1bxNX4cdCAjj2H5jPx2h1OFeXuPQJeN+okEjE7w5g+NIlJEnq8bPwumwptuqITYOtg1zaSs87ujvWzdzveFBI3vneAMZg4etN6D6frSECtsSCadDQtVwD6rI29aoosrPk3afUpNTp7gGoPJaB2r59ip190oB90qTplUk/YBZ4M7sxvTdreR0+dHMtzka6p/ORLiMX2rZOcgSns8VAZZJtV7e5w137wI9J3Rx5fphrkOTpP8KmcUar7vN2UB3uNYsnwACzJbaxlfw7W4U//o31eMpFuXyAEBOKvg7OCNtowYPBOiHWqhw7KsAJ46l13L
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDdofP9rRF3frrDg8ISy0/2aK8znvMPFxBWbEbf2mVGKNynOSbEGVWBB26SBniQIJY1L+/QisauLnHe+0hF9+fjjolTWbL+KWqGazlWok9x+H/GwPcVde3scfgiIv2XubWVduHMzXjQ3Ik7wN+4J36kUd8mgsyUGf1DhVKqGy6tjKKP/95nX6If6swehpuh1U5yryYZjrUheehdqoH2FOjMkYyjCYaTpiuaRj5qBnT5GcBvSkOP8BTOABDJ62m/sTA0Wr857VDHaPZBHqrzgC5YcW/UAqmoQBC9DzNtUJxlbcuU3MYmJTBdzmmEOMSj3QIP8x6jaf1+1YPdGjLePVV1
+    sudo: "ALL=NOPASSWD: ALL"
+  - name: esat
+    primary-group: esat
+    groups: adm, sudo, dip, video, plugdev, users
+    lock-passwd: true
+    ssh-authorized-keys:
+      - ssh-dss AAAAB3NzaC1kc3MAAACBAN1FyV0KZCejXO+zsYGyRHBGdvJQuByzhYh/XONFxB0QjXkSQQGLycjp7FzW30hRW4E3qVlO8sHvqyWXiRb+rXZxAkeyrqSwLUynQxiHFflYTK/wz2qlBl7VPGZYUw1oRFjmkQYHN7+Ybp0ZpKiaR5aKnXZSnfO49HfZ9I38s/T7AAAAFQD1sWhK8SJuW22xD/awq1EPEV6+fQAAAIAND4CllRnSSnWksA4WpbD0oeTyUgjpM7ANYo84NwjpGyc7uw5sjS4/GD9D11B2z5vWO0l+AwE62t92qAS2tSnc3Ki2faHeLHC5jKlbYcSu9dQ0aRgUM9JBiKRAp5IxEoBAUuRXxchQzkyX5wHhqoSnSkAQkP6SOg7QiH/WgTd0jQAAAIBnhKbO+521M2gFQWEsiA15fwgGjCNXfqBpfiKIlhmqG1tA30QTa+JHqoOSwb+kHCfkB+cleeUpGgj3oxPUTNdeyvvxjrIbaWjwEg8V2JD2AE35Vd5vHBEIVeAe0ByzmEy9ugi/x+I7I4jDiTYaOh+DCkD8wjp/enI3E6O3kL6RVg==
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDCfljYDGxHUWv0/NnNYL0KmexmdzcTJGXvM1ToBogfI8wvzTYbVKHjxDE9nGl3ttuZtLRtzzasa2rmQZhfy0dsAMpsNCgr4LGafA0WtoxLHFnrZ0+m4g5yRHz/5bJnhPzpGkNCAres7VlUvdPIQM8AZBZdd2CPmcMJFPQ2+joz1+dr6qQWWF0mv+5KJHI9GzliD1QeN/gUzP7PuOCsyRj+A/X6tN/vxiGRirGUWoGzb+f1n43QHCGvgKS+dM6/VLmW2J4Ib55ELRqLwM+0yadfKh3NZuNMHbOPG5Crs4VenZ3f/2OTs9jO92Kx6h3tdc8fLHQx5ONLk5DAl280Vv/a
+    sudo: "ALL=NOPASSWD: ALL"
+  - name: evren
+    primary-group: evren
+    groups: adm, sudo, dip, video, plugdev, users
+    lock-passwd: true
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDU+00kwVGJU56gZJ4RoyjVXhPamsgdpjn+gmTdEZlDwwmFwrLpyR30jHjIbI5T+L1wQYmu0IbUHfZsaL4xj1fPMHzJik0C+CGe9b5wZKFycOm/t4RsSuW441S3sQrBblvUFWy5iWBD/LKMBzpUogybjCZOV7T1TpK90cfTHfLOWiiXkQHgktLX1GvwJdfyrEylRBTZ7k1TwQWZ3mQ8jIp9uDy73AMJTOvjNwV3TvqAYwju69Jr50CNy5Lj7+ZekMI6xqPVsfuvjgvTsnMd//kYg6um4vuEeV9DFh/UY7ivrc8nphj3s7f80pXTbxz0FIaC1Q/+6vQH+tC7IeyVeBB7
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDjPKcwP1+73Vsy44pQdIW3bqLcRv+BphvYUBMgrC7/ajSQKZ9yrPg7V3tD2lDx3+NEZc5eHdGD1b2gWXtrHraNBFdnekPagJXNcnerggB1sNVMQ3Y2Ja56zPQsuXUSS1I1hTPS3/pKJy1q7i85fdx4xKuf6D182TSDDaxM7D2/EP8YLgkM+BkCc/iUDUWxtWs8Ac1PR0eFq+ewvSwaqt0OTZ+KtyQscFGgcyKLavYsyN4nHiWYv1C8SUzH/g5Gc2cWefK6iQD1jN9rXXNK7X7YjE4g3FdOLFzzLB/rHiLQ9y7XfZUgoBsfZ+ioz/+Nwj0rjehkuTnngbfyO1tm19jP
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkhzmpQqUvNwjOrnemvyM4sHoRCt3qdoTBU1kmYCMqzzRCyIv4MEyOM3yOENmUao7cwbROENvO9nleso4HGLEnHFoR/4i5995QOUJXwAoFKra/D2HyRD4Kew/Bfg941l2bNPl/LpZG4XvYnWtpowAuhIs8YD5dsTVr9WPYwT9p8hZIClDm+nTEQa6k3+NZSqSHtz5WfL5Jebjldrh2ASFPIC9ptyjdVETN6JtWuoyb6Pn7re6TMd3zOEC55uUplkntahydzBRczwr4dK+KvW2Xo4CoKxuiqac54cVQDjBcrM/LOpsnHvOiCw0QUv1Cwpn3RCXZCtSG/nxM37pra9yJ
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAQEXGfoFHhQpwCOn5lGQTNh4nYs0YCsJYgHBtTqQXdWL4sLk1r1/l77PfwC8/fX8sAI6Hjm2cCV88NUJnuJU7MQt/6LDLlfwLcQpt4KQWjsjGHhnwe3OV77Inw7wFSwMvt1JVpflSIuIwXXcN77fqNTlZO9hB22cJ9Zc5tx51qC88SGige8EZiEVCH9PTQUMmi+RfCHhSLRlHSbsiT9R2RySrrG3rY5KjbkOnr/EQF+mg/QRPwTtbur3De+IqH5jyz+z2CUFLx1pAqPm4zIrRhLAfjYuNkX5FBXiRzwVclKMWIb8Oq2X0I74hlLPGLhEO1r4pbSppirybGkz5xLnP
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNOo0/Y4ZIT4zjbbKzG8KkIJkMiuamrnvzMJe4rzNG4xr3PCMnKG5vNKWg81H+8Jl2bGafMSfCimHrMqJ8UzV2/uhD6lqKuuHrxRQTlPUs3YMnH2WMyfROU8/uH4XtdOHJWxlNzZl0NWxuYDEplBr8fjvzr/XL1WKOfjGrDQ2g6MBo9+EoSLwzH/iqcPw+P3pqYDk6uk8QUIYjl5BCRS1N48WykjiE5oJWwcj+wtdgYoISj5kpumHxXqRzlMO4kPRZlhXR+XP1wUfG8XPC5jEHiqaHXxuo+HAc+Tf4IQf25lKk+YYfCAoTbk8iBI9mLDq44zk4C55twNCNA9OvDfgz
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCXR20VaVM/eBheGcbT+Wqg6pDE9NdUsX2bXirVlXVem5pk0WLDGU1nqtR8TTf8MkGWclaeCWqxmOM5VCkJZOqWICYPLRz67S/tLsWpakJnUUmVBEpl2cm4DyHR5KVtNFG7l5fdVpGUTmmxX3SjJlbDKbIw2Os55GCDMvIWoa32nbay0uyLYQ1uXf2Dcj4h7sk8PLxT+TQ0S4y/RgYSYkw15PZ7Sc3piBE3udywZgy5h4NlIV59SqzCnCk5yql4UeSz4nOzlyCuIWwpjXx+hG2yk4mUlynStkAo9H9mSngkG/n3QCE0cS7Y5Al0R0eBoj3mahgLWesK0IsaYT2WmW/f
+    sudo: "ALL=NOPASSWD: ALL"
