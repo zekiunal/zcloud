@@ -22,5 +22,3 @@ ExecStop=/usr/bin/docker stop ulakbusui-%i
 
 [X-Fleet]
 MachineMetadata=machineof=app
-
-HTTP_DIR=$(mktemp -du); git clone https://github.com/zetaops/ulakbus-ui.git HTTP_DIR
