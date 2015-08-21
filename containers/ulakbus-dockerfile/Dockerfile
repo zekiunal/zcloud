@@ -15,7 +15,7 @@ ENV RIAK_SERVER 127.0.0.1
 ENV RIAK_PROTOCOL http
 
 # libssl and libffi dev packages for riak client
-RUN apt-get update && apt-get install -y git libssl-dev libffi-dev \
+RUN apt-get update && apt-get install -y --no-install-recommends git libssl-dev libffi-dev gcc \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Open ports for HTTP and Protocol Buffers
