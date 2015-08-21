@@ -1,34 +1,27 @@
-FROM phusion/baseimage:0.9.16
+FROM python:2.7-slim
 MAINTAINER Ali Riza Keles, alirza@zetaops.io
 
-# Environmental variables
-ENV DEBIAN_FRONTEND noninteractive
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ $(lsb_release -sc) main universe" >> /etc/apt/sources.list
-RUN apt-get update -qq && apt-get -y upgrade
-RUN apt-get install -y tar curl nano wget dialog net-tools
+# env vars for ulakbus
+ENV PYTHONIOENCODING UTF-8
+ENV ZENGINE_SETTINGS ulakbus.settings
+ENV LC_CTYPE en_US.UTF-8
+ENV PYOKO_SETTINGS ulakbus.settings
+ENV PYTHONUNBUFFERED 1
 
-## python2.7  zaerp zengine ipython
-RUN apt-get install -y python2.7 python-dev python-distribute python-setuptools
-RUN apt-get install -y git
-RUN apt-get install -y build-essential libssl-dev libffi-dev
+# defaults, will be overridden by run script, -e RIAK_SERVER=RIAK_LB
+ENV RIAK_PORT 8098
+ENV REDIS_SERVER 127.0.0.1:6379
+ENV RIAK_SERVER 127.0.0.1
+ENV RIAK_PROTOCOL http
 
-RUN easy_install --upgrade pip
-RUN pip install riak -q
-#RUN pip install -e git+https://github.com/basho/riak-python-client.git#egg=riak
-RUN pip install ipython -q
-RUN pip install git+git://github.com/didip/beaker_extensions.git
+# libssl and libffi dev packages for riak client
+RUN apt-get install -y git libssl-dev libffi-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Open ports for HTTP and Protocol Buffers
 EXPOSE 9001
 
+ADD app.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-RUN mkdir -p /etc/service/app
-ADD app.sh /etc/service/app/run
-RUN chmod 755 /etc/service/app/run
-
-
-# Cleanup
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Leverage the baseimage-docker init system
-CMD ["/sbin/my_init", "--quiet"]
+ENTRYPOINT ["/entrypoint.sh"]
