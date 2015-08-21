@@ -16,7 +16,7 @@ ExecStartPre=-/usr/bin/docker kill ulakbusui-%i
 ExecStartPre=-/usr/bin/docker rm ulakbusui-%i
 ExecStartPre=/usr/bin/docker pull zetaops/ulakbus-ui
 
-ExecStart=/usr/bin/docker run --name ulakbusui-%i -P zetaops/ulakbus-ui
+ExecStart=/usr/bin/docker run --name ulakbusui-%i -v /etc/localtime:/etc/localtime:ro  -P zetaops/ulakbus-ui
 
 ExecStop=/usr/bin/docker stop ulakbusui-%i
 
