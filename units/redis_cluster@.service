@@ -20,10 +20,10 @@ ExecStartPre=/bin/bash /home/core/bin/redis_cluster.sh
 ExecStart=/bin/bash -c 'MAS=`etcdctl get /zaerp/envs/REDIS_MASTER`; \
                         if [ -n "$MAS" ] ; then \
                             echo master var: "$MAS"; \
-                            EXEC="/usr/bin/docker run --name redis-%i --hostname %H -P  redis redis-server --slaveof $MAS";\
+                            EXEC="/usr/bin/docker run --name redis-%i --hostname %H -v /etc/localtime:/etc/localtime:ro -P  redis redis-server --slaveof $MAS";\
                             eval $EXEC; \
                         else \
-                            /usr/bin/docker run --name redis-%i --hostname %H -P redis; \
+                            /usr/bin/docker run --name redis-%i --hostname %H -v /etc/localtime:/etc/localtime:ro -P redis; \
                             echo master yok: "$MAS"; \
                         fi'
 
