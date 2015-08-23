@@ -6,6 +6,9 @@ Requires=docker.service
 After=etcd.service
 After=docker.service
 
+Wants=ncat_ulakbusui@*.service
+Before=ncat_ulakbusui@*.service
+
 
 [Service]
 TimeoutStartSec=0

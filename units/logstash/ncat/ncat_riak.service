@@ -1,0 +1,15 @@
+[Unit]
+Description=Zato Load Balancer Logstash Service
+Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
+
+Requires=riak@*.service
+BindsTo=riak@*.service
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/bash -c 'journalctl -o short -u riak@*.service -f | ncat zx-logging-01.c.zetaops-academic-erp.internal 5301'
+
+[X-Fleet]
+Conflicts=ncat_riak@*.service
+MachineMetadata=machineof=lb
+MachineMetadata=disk=ssd

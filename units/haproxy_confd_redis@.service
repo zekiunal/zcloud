@@ -12,7 +12,7 @@ ExecStartPre=-/usr/bin/docker kill haproxy-confd-redis
 ExecStartPre=-/usr/bin/docker rm haproxy-confd-redis
 ExecStartPre=/usr/bin/docker pull zetaops/haproxy-confd-redis
 
-ExecStart=/bin/bash -c 'docker run --rm --name haproxy-confd-redis -p 6379:6379 -e "ETCD_IP=$COREOS_PRIVATE_IPV4" zetaops/haproxy-confd-redis'
+ExecStart=/bin/bash -c 'docker run -v /etc/localtime:/etc/localtime:ro  --rm --name haproxy-confd-redis -p 6379:6379 -e "ETCD_IP=$COREOS_PRIVATE_IPV4" zetaops/haproxy-confd-redis'
 
 ExecStop=/usr/bin/docker stop haproxy-confd-redis
 

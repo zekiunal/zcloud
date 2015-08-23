@@ -1,0 +1,15 @@
+[Unit]
+Description=buildbot_master logstash service
+
+Requires=elk@*.service
+BindsTo=elk@*.service
+#StopWhenUnneeded=true
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/bash -c 'journalctl -o short -u elk@*.service -f | ncat zx-logging-01.c.zetaops-academic-erp.internal 5301'
+
+[X-Fleet]
+MachineMetadata=machineof=app
+MachineMetadata=disk=ssd
+Conflicts=ncat_elk@*.service

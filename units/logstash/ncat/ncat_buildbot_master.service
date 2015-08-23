@@ -12,4 +12,4 @@ ExecStart=/bin/bash -c 'journalctl -o short -u buildbot_master.service -f | ncat
 [X-Fleet]
 MachineMetadata=machineof=app
 MachineMetadata=disk=ssd
-Conflicts=ncat_buildbot_master@service
+Conflicts=ncat_buildbot_master.service

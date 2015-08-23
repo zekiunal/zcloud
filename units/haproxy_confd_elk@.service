@@ -2,6 +2,10 @@
 Description=Confd with haproxy
 Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
 
+Wants=ncat_haproxy_confd_elk@*.service
+Before=ncat_haproxy_confd_elk@*.service
+
+
 [Service]
 TimeoutStartSec=0
 EnvironmentFile=/etc/environment
@@ -12,7 +16,7 @@ ExecStartPre=-/usr/bin/docker kill haproxy-confd-elk
 ExecStartPre=-/usr/bin/docker rm haproxy-confd-elk
 ExecStartPre=/usr/bin/docker pull zetaops/haproxy-confd-elk
 
-ExecStart=/bin/bash -c 'docker run --name haproxy-confd-elk -p 9200:9200 -p 5601:5601 -e "ETCD_IP=$COREOS_PRIVATE_IPV4" zetaops/haproxy-confd-elk'
+ExecStart=/bin/bash -c 'docker run -v /etc/localtime:/etc/localtime:ro  --name haproxy-confd-elk -p 9200:9200 -p 5601:5601 -e "ETCD_IP=$COREOS_PRIVATE_IPV4" zetaops/haproxy-confd-elk'
 
 ExecStop=/usr/bin/docker stop haproxy-confd-elk
 
