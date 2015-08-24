@@ -1,0 +1,13 @@
+[Unit]
+Description=Ulakbus Logstash Service
+
+Requires=ulakbus@*.service
+BindsTo=ulakbus@*.service
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/bash -c 'journalctl -o short -u ulakbus@*.service -f | ncat zx-logging-01.c.zetaops-academic-erp.internal 5301'
+
+[X-Fleet]
+MachineMetadata=machineof=app
+MachineMetadata=disk=ssd

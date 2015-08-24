@@ -1,0 +1,15 @@
+[Unit]
+Description=haproxy_confd_all-in-one.service logstash service
+
+Requires=haproxy_confd_all-in-one.service
+BindsTo=haproxy_confd_all-in-one.service
+#StopWhenUnneeded=true
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/bash -c 'journalctl -o short -u haproxy_confd_all-in-one.service -f | ncat zx-logging-01.c.zetaops-academic-erp.internal 5301'
+
+[X-Fleet]
+MachineMetadata=machineof=app
+MachineMetadata=disk=ssd
+Conflicts=ncat_haproxy_confd_all-in-one.service
