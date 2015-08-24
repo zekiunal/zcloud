@@ -144,3 +144,23 @@ coreos:
         What=/dev/vdb1
         Where=/mnt/data
         Type=ext4
+
+    - name: systemd-resolved-restart.service
+      command: start
+      content: |
+        [Unit]
+        Description=Set private DNS
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/systemctl restart systemd-resolved
+
+write_files:
+  - path: /etc/systemd/resolved.conf.d/00-zetaops-local-dns.conf
+    permissions: 0644
+    owner: root
+    content: |
+      # private dns servers for local domain
+      [Resolve]
+                                                                                                                                                                                                                            173,12        99%
+

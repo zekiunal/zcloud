@@ -135,6 +135,16 @@ coreos:
 
         ExecStop=/usr/bin/docker stop registrator-consul
 
+    - name: systemd-resolved-restart.service
+      command: start
+      content: |
+        [Unit]
+        Description=Set private DNS
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/systemctl restart systemd-resolved
+
         
 write_files:
   - path: /home/core/etc/environment
@@ -240,3 +250,12 @@ write_files:
           etcdctl rm /zaerp/envs/REDIS_MASTER
           echo "Hic master yok, hic redis de yok"
       fi
+
+  - path: /etc/systemd/resolved.conf.d/00-zetaops-local-dns.conf
+    permissions: 0644
+    owner: root
+    content: |
+      # private dns servers for local domain
+      [Resolve]
+      DNS=10.61.31.68 10.61.31.67
+
