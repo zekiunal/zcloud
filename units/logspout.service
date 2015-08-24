@@ -1,0 +1,25 @@
+[Unit]
+Description=Logspout service
+
+Requires=docker.service
+After=docker.service
+
+Wants=ncat_logspout.service
+Before=ncat_logspout.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/etc/environment
+
+ExecStartPre=-/usr/bin/docker kill logspout
+ExecStartPre=-/usr/bin/docker rm logspout
+ExecStartPre=/usr/bin/docker pull gliderlabs/logspout
+
+ExecStart=/bin/bash -c '/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro -e SYSLOG_FORMAT=rfc3164 --name logspout --volume=/var/run/docker.sock:/tmp/docker.sock zetaops/logspout syslog://IP?:5006'
+ExecStop=/usr/bin/docker stop logspout
+
+[X-Fleet]
+MachineMetadata=machineof=app
+MachineMetadata=disk=ssd
+Conflicts=logspout@service
+
