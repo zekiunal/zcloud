@@ -1,5 +1,5 @@
 [Unit]
-Description=Postgres Zato
+Description=Postgres Buildbot
 Documentation=https://github.com/zetaops/zcloud/blob/master/docs/redis-service.md
 After=docker.service
 Requires=docker.service
