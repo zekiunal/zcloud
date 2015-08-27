@@ -24,4 +24,5 @@ ExecStop=/usr/bin/docker stop haproxy-confd-ulakbus
 [X-Fleet]
 Conflicts=haproxy_confd_ulakbus@*.service
 MachineMetadata=machineof=lb
-MachineMetadata=disk=ssd
+# disks are not ssd on openstack, commented out
+# MachineMetadata=disk=ssd

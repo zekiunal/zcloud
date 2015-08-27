@@ -27,4 +27,4 @@ ExecStop=/usr/bin/docker stop riak-%i
 [X-Fleet]
 Conflicts=riak@*.service
 MachineMetadata=machineof=riak
-MachineMetadata=disk=ssd
+#MachineMetadata=disk=ssd

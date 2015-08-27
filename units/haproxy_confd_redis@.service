@@ -20,4 +20,4 @@ ExecStop=/usr/bin/docker stop haproxy-confd-redis
 [X-Fleet]
 Conflicts=haproxy_confd_redis@*.service
 MachineMetadata=machineof=lb
-MachineMetadata=disk=ssd
+#MachineMetadata=disk=ssd

@@ -23,4 +23,3 @@ ExecStop=/usr/bin/docker zato-lb
 [X-Fleet]
 Conflicts=zato_lb@*.service
 MachineMetadata=machineof=lb
-MachineMetadata=disk=ssd

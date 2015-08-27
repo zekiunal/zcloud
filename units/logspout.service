@@ -20,6 +20,5 @@ ExecStop=/usr/bin/docker stop logspout
 
 [X-Fleet]
 MachineMetadata=machineof=app
-MachineMetadata=disk=ssd
+#MachineMetadata=disk=ssd
 Conflicts=logspout@service
-

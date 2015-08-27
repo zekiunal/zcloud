@@ -1,9 +1,7 @@
 [Unit]
 Description=buildbot_master logstash service
-
 Requires=postgresql.service
 BindsTo=postgresql.service
-#StopWhenUnneeded=true
 
 [Service]
 TimeoutStartSec=0

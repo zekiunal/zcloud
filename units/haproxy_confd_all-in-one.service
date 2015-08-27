@@ -23,4 +23,4 @@ ExecStop=/usr/bin/docker stop haproxy-confd
 [X-Fleet]
 Conflicts=haproxy_confd_all-in-one.service
 MachineMetadata=machineof=lb
-MachineMetadata=disk=ssd
+#sMachineMetadata=disk=ssd
