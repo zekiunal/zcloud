@@ -17,6 +17,7 @@ ExecStartPre=/usr/bin/docker pull zetaops/buildbot-master
 
 ExecStart=/bin/bash -c '/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro -h $(hostname) --name buildbot-master \
        -e SLAVE_HOST=ulakbus-buildbot-slave-01.zetaops.local -e SLAVE_DOCKER_PORT=2375 \
+       -e POSTGRES_BUILDBOT=$(etcdctl get /zaerp/envs/POSTGRES_BUILDBOT)  \
        -p 8010:8010 -p 9989:9989 zetaops/buildbot-master'
 
 ExecStop=/usr/bin/docker stop buildbot-master
