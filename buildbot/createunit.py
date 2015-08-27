@@ -3,6 +3,7 @@ import json
 import datetime
 import sys
 
+# TODO: change fleet api url
 url = 'http://zx-control-center.c.zetaops-academic-erp.internal:49153/fleet/v1/units'
 headers={'content-type':'application/json'}
 
@@ -24,6 +25,10 @@ def createUnit(unit):
 	newunit['options'] = getCurrentServiceOptions(unit)
 	unitcreate = requests.put(url+newunit['name'], data=json.dumps(newunit), headers=headers)
 	return unitcreate.content
+
+def removeOldUnits(unit):
+	# TODO: fleet api delete call
+	pass
 
 if __name__ == '__main__':
 	createUnit(sys.argv[1])
