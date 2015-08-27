@@ -34,7 +34,7 @@ COPY entrypoint.sh /
 
 RUN apt-get update \
         && apt-get install -y rsyslog \
-	&& && rm -rf /var/lib/apt/lists/*
+	    && rm -rf /var/lib/apt/lists/*
 
 # Rsyslog configuration
 
