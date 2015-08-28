@@ -4,6 +4,7 @@ import time
 import sys
 import re
 
+# TODO: change fleet api url
 url = 'http://zx-control-center.c.zetaops-academic-erp.internal:49153/fleet/v1/units'
 unit_url = 'https://raw.githubusercontent.com/zetaops/zcloud/master/units/'
 headers={'content-type':'application/json'}
@@ -35,6 +36,10 @@ def createUnit(unitname):
 	newunit['options'] = createServiceOptions(unitname)
 	unitcreate = requests.put(url+'/'+newunit['name'], data=json.dumps(newunit), headers=headers)
 	return unitcreate.content
+
+def removeOldUnits(unit):
+	# TODO: fleet api delete call
+	pass
 
 if __name__ == '__main__':
 	createUnit(sys.argv[1])
