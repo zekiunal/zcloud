@@ -16,8 +16,7 @@ RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip python-dev supervisor git wget python-psycopg2
 RUN pip install autobahn==0.10.4 twisted==15.2.1 docker-py
 RUN easy_install --upgrade six
-RUN git clone https://github.com/buildbot/buildbot && cd buildbot/master && python setup.py install --old-and-unmanageable
-RUN pip install buildbot_www==0.9.0b1 buildbot_slave
+RUN pip install buildbot==0.9.0b1 buildbot_www==0.9.0b1 buildbot_slave
 
 # Set ssh superuser (username: admin   password: admin)
 RUN mkdir /data 
