@@ -35,6 +35,7 @@ RUN cd /data/buildbot; sudo -u admin sh -c "buildbot create-master master"
 #     "buildslave create-slave ulakbus-free-slave localhost:9989 ulakbus-slave q8J4fjJG"
 
 COPY master/docker.py /usr/local/lib/python2.7/dist-packages/buildbot/buildslave/docker.py
+COPY master/default_mail.txt /usr/local/lib/python2.7/dist-packages/buildbot/reporters/templates/default_mail.txt
 # COPY master/master.cfg /data/buildbot/master/
 
 # Set supervisord buildbot and sshd processes
