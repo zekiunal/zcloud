@@ -32,7 +32,7 @@ def createUnit(unitname):
 	# 	raise Exception('unitname must end with @')
 	newunit = {}
 	newunit['name'] = incrementUnitName(unitname)
-	newunit['desiredState'] = 'loaded'
+	newunit['desiredState'] = 'launched'
 	newunit['options'] = createServiceOptions(unitname)
 	unitcreate = requests.put(url+'/'+newunit['name'], data=json.dumps(newunit), headers=headers)
 	return unitcreate.content
