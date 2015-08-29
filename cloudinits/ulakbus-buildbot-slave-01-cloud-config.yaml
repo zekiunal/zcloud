@@ -170,6 +170,17 @@ coreos:
         Type=oneshot
         ExecStart=/usr/bin/systemctl restart systemd-resolved
 
+    - name: set-hostname.service
+      command: start
+      content: |
+        [Unit]
+        Description=Set hostname using hostnamectl as you wish
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-buildbot-slave-01.zetaops.local
+
+
 write_files:
   - path: /etc/systemd/resolved.conf.d/00-zetaops-local-dns.conf
     permissions: 0644

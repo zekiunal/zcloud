@@ -145,8 +145,16 @@ coreos:
         Type=oneshot
         ExecStart=/usr/bin/systemctl restart systemd-resolved
 
+    - name: set-hostname.service
+      command: start
+      content: |
+        [Unit]
+        Description=Set hostname using hostnamectl as you wish
 
-        
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-redis-02.zetaops.local
+
 write_files:
   - path: /home/core/etc/environment
     permissions: 0755
