@@ -2,6 +2,7 @@ FROM phusion/baseimage:0.9.17
 RUN apt-get update && apt-get install -y \
    python-dev \
    python-pip \
+   libfreetype \
    git \
    curl \
    nodejs
