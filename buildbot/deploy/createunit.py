@@ -5,7 +5,7 @@ import sys
 import re
 
 # TODO: change fleet api url
-url = 'http://zx-control-center.c.zetaops-academic-erp.internal:49153/fleet/v1/units'
+url = 'http://ulakbus-control-center.zetaops.local:49153/fleet/v1/units'
 unit_url = 'https://raw.githubusercontent.com/zetaops/zcloud/master/units/'
 headers={'content-type':'application/json'}
 
