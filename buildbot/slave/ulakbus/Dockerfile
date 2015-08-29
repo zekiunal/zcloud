@@ -2,6 +2,7 @@ FROM phusion/baseimage:0.9.17
 RUN apt-get update && apt-get install -y \
    python-dev \
    python-pip \
+   libffi-dev
    git
 RUN pip install twisted==15.2.1 buildbot-slave
 RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
