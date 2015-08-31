@@ -47,6 +47,21 @@ coreos:
         RemainAfterExit=yes
         Type=oneshot
 
+    - name: reconfigure-hostname.service
+      # timezone settings. ntp use coreos default pools, just tune timezone
+      # https://coreos.com/docs/cluster-management/setup/configuring-date-and-timezone/
+      command: start
+      content: |
+        [Unit]
+        Description=Set hostname using hostnamectl as you wish
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-app-03.zetaops.local
+
+        [Install]
+        WantedBy=local.target
+
     - name: consul.service
       command: start
       content: |
@@ -167,5 +182,4 @@ write_files:
     content: |
       # private dns servers for local domain
       [Resolve]
-                                                                                                                                                                                                                            173,12        99%
-
+      DNS=10.61.31.68 10.61.31.67
