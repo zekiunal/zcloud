@@ -32,7 +32,6 @@ ExecStartPost=/bin/bash -c "sleep 5; etcdctl set /zaerp/envs/POSTGRES_ZATO %H:`d
 ExecStop=/bin/bash -c "/usr/bin/docker stop postgres-zato; etcdctl rm /zaerp/envs/POSTGRES_ZATO;"
 
 [X-Fleet]
-Conflicts=postgresql.service
+Conflicts=postgresql_zato.service
 # open this service only postgres machine
-MachineMetadata=machineof=redis
 MachineMetadata=postgres=true

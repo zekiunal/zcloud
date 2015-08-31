@@ -27,7 +27,6 @@ ExecStartPost=/bin/bash -c "sleep 5; etcdctl set /zaerp/envs/POSTGRES_DISCOURSE 
 ExecStop=/bin/bash -c "/usr/bin/docker stop postgres-discourse; etcdctl rm /zaerp/envs/POSTGRES_DISCOURSE;"
 
 [X-Fleet]
-Conflicts=postgresql.service
+Conflicts=postgresql_discourse.service
 # open this service only postgres machine
-MachineMetadata=machineof=redis
 MachineMetadata=postgres=true
