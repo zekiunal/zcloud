@@ -155,7 +155,16 @@ coreos:
         Where=/mnt/postgres
         Type=ext4
 
-        
+    - name: set-hostname.service
+      command: start
+      content: |
+        [Unit]
+        Description=Set hostname using hostnamectl as you wish
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-redis-03-postgres.zetaops.local
+
 write_files:
   - path: /home/core/etc/environment
     permissions: 0755
@@ -268,4 +277,3 @@ write_files:
       # private dns servers for local domain
       [Resolve]
       DNS=10.61.31.68 10.61.31.67
-
