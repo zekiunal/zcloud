@@ -145,6 +145,16 @@ coreos:
         Type=oneshot
         ExecStart=/usr/bin/systemctl restart systemd-resolved
 
+    - name: mnt-postgres.mount
+      command: start
+      content: |
+        [Unit]
+        Description=Mount to /mnt/postgres
+        [Mount]
+        What=/dev/vdb1
+        Where=/mnt/postgres
+        Type=ext4
+
         
 write_files:
   - path: /home/core/etc/environment
