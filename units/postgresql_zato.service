@@ -6,9 +6,6 @@ Requires=docker.service
 After=etcd.service
 Requires=etcd.service
 
-Wants=ncat_postgresql@*.service
-Before=ncat_postgresql@*.service
-
 [Service]
 TimeoutStartSec=3min
 RestartSec=20sec
