@@ -2,10 +2,6 @@
 Description=Confd with haproxy
 Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
 
-Wants=ncat_haproxy_confd_elk@*.service
-Before=ncat_haproxy_confd_elk@*.service
-
-
 [Service]
 TimeoutStartSec=0
 EnvironmentFile=/etc/environment

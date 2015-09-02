@@ -6,9 +6,6 @@ Requires=docker.service
 After=etcd.service
 Requires=etcd.service
 
-Wants=ncat_redis_cluster@*.service
-Before=ncat_redis_cluster@*.service
-
 [Service]
 TimeoutStartSec=3min
 RestartSec=20sec
