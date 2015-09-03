@@ -1,30 +1,17 @@
 [Unit]
 Description=buildbot master
-
 Requires=docker.service
 After=docker.service
-
-Wants=ncat_buildbot_master.service
-Before=ncat_buildbot_master.service
 
 [Service]
 TimeoutStartSec=0
 EnvironmentFile=/etc/environment
-
 ExecStartPre=-/usr/bin/docker kill buildbot-master
 ExecStartPre=-/usr/bin/docker rm buildbot-master
 ExecStartPre=/usr/bin/docker pull zetaops/buildbot-master
-
-ExecStart=/bin/bash -c '/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro -h $(hostname) --name buildbot-master \
-       -e SLAVE_HOST=ulakbus-buildbot-slave-01.zetaops.local -e SLAVE_DOCKER_PORT=2375 \
-       -e POSTGRES_BUILDBOT=$(etcdctl get /zaerp/envs/POSTGRES_BUILDBOT)  \
-       -e SMTPUSER=$(etcdctl get /zaerp/envs/SMTPUSER)  \
-       -e SMTPPASSWORD=$(etcdctl get /zaerp/envs/SMTPPASSWORD)  \
-       -p 8010:8010 -p 9989:9989 zetaops/buildbot-master'
-
+ExecStart=/bin/bash -c '/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro -h $(hostname) --name buildbot-master         -e SLAVE_HOST=ulakbus-buildbot-slave-01.zetaops.local -e SLAVE_DOCKER_PORT=2375         -e POSTGRES_BUILDBOT=$(etcdctl get /zaerp/envs/POSTGRES_BUILDBOT)          -e SMTPUSER=$(etcdctl get /zaerp/envs/SMTPUSER)          -e SMTPPASSWORD=$(etcdctl get /zaerp/envs/SMTPPASSWORD)          -p 8010:8010 -p 9989:9989 zetaops/buildbot-master'
 ExecStop=/usr/bin/docker stop buildbot-master
 
 [X-Fleet]
 MachineMetadata=machineof=app
-#MachineMetadata=disk=ssd
 Conflicts=buildbot_master@service

@@ -165,6 +165,27 @@ coreos:
         Type=oneshot
         ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-logging-01.zetaops.local
 
+    - name: logspout.service
+      command: start
+      content: |
+        [Unit]
+        Description=Logspout service
+
+        Requires=docker.service
+        After=docker.service
+
+        [Service]
+        TimeoutStartSec=0
+        EnvironmentFile=/etc/environment
+
+        ExecStartPre=-/usr/bin/docker kill logspout
+        ExecStartPre=-/usr/bin/docker rm logspout
+        ExecStartPre=/usr/bin/docker pull gliderlabs/logspout
+
+        ExecStart=/bin/bash -c '/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro -e SYSLOG_FORMAT=rfc3164 --name logspout --volume=/var/run/docker.sock:/tmp/docker.sock gliderlabs/logspout syslog://ulakbus-logging-01.zetaops.local:5006'
+        ExecStop=/usr/bin/docker stop logspout
+
+
 write_files:
   - path: /etc/systemd/resolved.conf.d/00-zetaops-local-dns.conf
     permissions: 0644

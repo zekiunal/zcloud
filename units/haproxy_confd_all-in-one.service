@@ -2,9 +2,6 @@
 Description=Confd with haproxy
 Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
 
-Wants=ncat_aproxy_confd_all-in-one.service@*.service
-Before=ncat_aproxy_confd_all-in-one.service@*.service
-
 [Service]
 TimeoutStartSec=3min
 EnvironmentFile=/etc/environment

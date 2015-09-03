@@ -2,9 +2,6 @@
 Description=Zato Load Balancer
 Documentation=https://github.com/zetaops/zcloud/blob/master/docs/registrator2consul-service.md
 
-Wants=ncat_zato_lb@*.service
-Before=zato_lb@*.service
-
 [Service]
 TimeoutStartSec=0
 EnvironmentFile=/etc/environment
