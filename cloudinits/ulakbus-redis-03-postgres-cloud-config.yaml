@@ -169,7 +169,7 @@ coreos:
 
         [Service]
         Type=oneshot
-        ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-redis-03-postgres.zetaops.local
+        ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-redis-03.zetaops.local
 
     - name: logspout.service
       command: start
