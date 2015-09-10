@@ -54,6 +54,8 @@ coreos:
         After=etcd.service
         After=flanneld.service
         After=docker.service
+        After=set-hostname.service
+        Requires=set-hostname.service
 
         [Service]
         TimeoutStartSec=0
@@ -89,6 +91,8 @@ coreos:
         Requires=docker.service
         After=flanneld.service
         Requires=flanneld.service
+        After=set-hostname.service
+        Requires=set-hostname.service
 
         [Service]
         TimeoutStartSec=0
@@ -119,6 +123,8 @@ coreos:
         Requires=docker.service
         After=flanneld.service
         Requires=flanneld.service
+        After=set-hostname.service
+        Requires=set-hostname.service
 
         [Service]
         TimeoutStartSec=0

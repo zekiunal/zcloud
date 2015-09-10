@@ -54,6 +54,8 @@ coreos:
         After=etcd.service
         After=flanneld.service
         After=docker.service
+        Requires=set-hostname.service
+        After=set-hostname.service
 
         [Service]
         TimeoutStartSec=0
@@ -89,6 +91,8 @@ coreos:
         Requires=docker.service
         After=flanneld.service
         Requires=flanneld.service
+        Requires=set-hostname.service
+        After=set-hostname.service
 
         [Service]
         TimeoutStartSec=0
@@ -119,6 +123,8 @@ coreos:
         Requires=docker.service
         After=flanneld.service
         Requires=flanneld.service
+        Requires=set-hostname.service
+        After=set-hostname.service
 
         [Service]
         TimeoutStartSec=0
@@ -283,15 +289,6 @@ write_files:
           echo "Hic master yok, hic redis de yok"
       fi
 
-    - name: systemd-resolved-restart.service
-      command: start
-      content: |
-        [Unit]
-        Description=Set private DNS
-
-        [Service]
-        Type=oneshot
-        ExecStart=/usr/bin/systemctl restart systemd-resolved
 
   - path: /etc/systemd/resolved.conf.d/00-zetaops-local-dns.conf
     permissions: 0644
