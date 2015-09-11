@@ -6,9 +6,6 @@ Requires=docker.service
 After=etcd.service
 Requires=etcd.service
 
-Wants=ncat_postgresql@*.service
-Before=ncat_postgresql@*.service
-
 [Service]
 TimeoutStartSec=3min
 RestartSec=20sec
@@ -17,22 +14,19 @@ Restart=on-failure
 ExecStartPre=-/usr/bin/docker kill postgres-zato
 ExecStartPre=-/usr/bin/docker rm postgres-zato
 ExecStartPre=/usr/bin/docker pull postgres
-# retrieve psql passwd from etcd, if set
-# or create a new psql password
+
 # start new postgres service
 # add etcd keys after start
-#ExecStart=/bin/bash -c 'POSTGRES_PASSWORD=$(if etcdctl get /zaerp/envs/POSTGRES_PASSD > /dev/null 2>&1; then etcdctl get /zaerp/envs/POSTGRES_PASSD; else etcdctl set /zaerp/envs/POSTGRES_PASSD `openssl rand -base64 32`; fi;); docker run -v /etc/localtime:/etc/localtime:ro  --name postgres --hostname %H -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD  -e POSTGRES_USER=zato -v /mnt/postgres:/var/lib/postgresql/data -p 5432:5432 postgres; sleep 3'
 
 ExecStart=/bin/bash -c 'docker run -v /etc/localtime:/etc/localtime:ro  --name postgres-zato --hostname %H \
               -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD  -e POSTGRES_USER=zato \
-              -v /mnt/postgres/zato:/var/lib/postgresql/data -p 5432:5432 postgres; sleep 3'
+              -v /mnt/postgres/zato:/var/lib/postgresql/data -p 5433:5432 postgres; sleep 3'
 
 ExecStartPost=/bin/bash -c "sleep 5; etcdctl set /zaerp/envs/POSTGRES_ZATO %H:`docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}}{{(index $conf 0).HostPort}}{{end}}' postgres-zato`;"
 
 ExecStop=/bin/bash -c "/usr/bin/docker stop postgres-zato; etcdctl rm /zaerp/envs/POSTGRES_ZATO;"
 
 [X-Fleet]
-Conflicts=postgresql.service
+Conflicts=postgresql_zato.service
 # open this service only postgres machine
-MachineMetadata=machineof=redis
 MachineMetadata=postgres=true

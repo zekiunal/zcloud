@@ -1,9 +1,6 @@
 [Unit]
 Description=riak
 
-Wants=ncat_riak@*.service
-Before=ncat_riak@*.service
-
 [Service]
 Restart=on-failure
 TimeoutSec=15min

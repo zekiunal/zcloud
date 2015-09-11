@@ -8,9 +8,6 @@ Requires=etcd.service
 After=docker.service
 Requires=docker.service
 
-Wants=ncat_registrator2consul.service
-Before=ncat_registrator2consul.service
-
 [Service]
 TimeoutStartSec=3min
 RestartSec=20sec

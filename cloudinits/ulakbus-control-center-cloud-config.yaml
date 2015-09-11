@@ -47,6 +47,21 @@ coreos:
         RemainAfterExit=yes
         Type=oneshot
 
+    - name: reconfigure-hostname.service
+      # timezone settings. ntp use coreos default pools, just tune timezone
+      # https://coreos.com/docs/cluster-management/setup/configuring-date-and-timezone/
+      command: start
+      content: |
+        [Unit]
+        Description=Set hostname using hostnamectl as you wish
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-app-03.zetaops.local
+
+        [Install]
+        WantedBy=local.target
+
     - name: consul.service
       command: start
       content: |
@@ -59,6 +74,8 @@ coreos:
         After=etcd.service
         After=flanneld.service
         After=docker.service
+        Requires=set-hostname.service
+        After=set-hostname.service
 
         [Service]
         TimeoutStartSec=0
@@ -94,6 +111,8 @@ coreos:
         Requires=docker.service
         After=flanneld.service
         Requires=flanneld.service
+        Requires=set-hostname.service
+        After=set-hostname.service
 
         [Service]
         TimeoutStartSec=0
@@ -124,6 +143,8 @@ coreos:
         Requires=docker.service
         After=flanneld.service
         Requires=flanneld.service
+        Requires=set-hostname.service
+        After=set-hostname.service
 
         [Service]
         TimeoutStartSec=0
@@ -160,6 +181,37 @@ coreos:
         Type=oneshot
         ExecStart=/usr/bin/systemctl restart systemd-resolved
 
+    - name: set-hostname.service
+      command: start
+      content: |
+        [Unit]
+        Description=Set hostname using hostnamectl as you wish
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/hostnamectl set-hostname ulakbus-control-center.zetaops.local
+
+    - name: logspout.service
+      command: start
+      content: |
+        [Unit]
+        Description=Logspout service
+
+        Requires=docker.service
+        After=docker.service
+
+        [Service]
+        TimeoutStartSec=0
+        EnvironmentFile=/etc/environment
+
+        ExecStartPre=-/usr/bin/docker kill logspout
+        ExecStartPre=-/usr/bin/docker rm logspout
+        ExecStartPre=/usr/bin/docker pull gliderlabs/logspout
+
+        ExecStart=/bin/bash -c '/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro -e SYSLOG_FORMAT=rfc3164 --name logspout --volume=/var/run/docker.sock:/tmp/docker.sock gliderlabs/logspout syslog://ulakbus-logging-01.zetaops.local:5006'
+        ExecStop=/usr/bin/docker stop logspout
+
+
 write_files:
   - path: /etc/systemd/resolved.conf.d/00-zetaops-local-dns.conf
     permissions: 0644
@@ -167,5 +219,4 @@ write_files:
     content: |
       # private dns servers for local domain
       [Resolve]
-                                                                                                                                                                                                                            173,12        99%
-
+      DNS=10.61.31.68 10.61.31.67

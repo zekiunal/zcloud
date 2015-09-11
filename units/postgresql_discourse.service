@@ -6,9 +6,6 @@ Requires=docker.service
 After=etcd.service
 Requires=etcd.service
 
-Wants=ncat_postgresql@*.service
-Before=ncat_postgresql@*.service
-
 [Service]
 TimeoutStartSec=3min
 RestartSec=20sec
@@ -17,17 +14,11 @@ Restart=on-failure
 ExecStartPre=-/usr/bin/docker kill postgres-discourse
 ExecStartPre=-/usr/bin/docker rm postgres-discourse
 ExecStartPre=/usr/bin/docker pull postgres
-
-ExecStart=/bin/bash -c 'docker run -v /etc/localtime:/etc/localtime:ro  --name postgres-discourse --hostname %H \
-              -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD  -e POSTGRES_USER=discourse \
-              -v /mnt/postgres/discourse:/var/lib/postgresql/data -p 5432:5432 postgres; sleep 3'
-
+ExecStart=/bin/bash -c 'docker run -v /etc/localtime:/etc/localtime:ro  --name postgres-discourse --hostname %H                -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD  -e POSTGRES_USER=discourse                -v /mnt/postgres/discourse:/var/lib/postgresql/data -P postgres; sleep 3'
 ExecStartPost=/bin/bash -c "sleep 5; etcdctl set /zaerp/envs/POSTGRES_DISCOURSE %H:`docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}}{{(index $conf 0).HostPort}}{{end}}' postgres-discourse`;"
-
 ExecStop=/bin/bash -c "/usr/bin/docker stop postgres-discourse; etcdctl rm /zaerp/envs/POSTGRES_DISCOURSE;"
 
 [X-Fleet]
-Conflicts=postgresql.service
-# open this service only postgres machine
+Conflicts=postgresql_discourse.service
 MachineMetadata=machineof=redis
 MachineMetadata=postgres=true
