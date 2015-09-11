@@ -14,7 +14,7 @@ RUN chown -R buildbot:buildbot /usr/local/
 USER buildbot
 WORKDIR /buildslave
 ENV PYOKO_SETTINGS 'ulakbus.settings'
-ENV RIAK_SERVER 'zx-lb-01.c.zetaops-academic-erp.internal'
+ENV RIAK_SERVER 'ulakbus-internal-riak-http.zetaops.local'
 ENV RIAK_PORT '8098'
 ENV RIAK_PROTOCOL 'http'
 
