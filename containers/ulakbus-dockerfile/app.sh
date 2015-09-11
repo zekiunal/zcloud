@@ -11,5 +11,8 @@ cd /app/ulakbus/
 python setup.py install
 
 ### Run Server ###
-cd /app/ulakbus/ulakbus/
-python runserver.py
+#cd /app/ulakbus/ulakbus/
+#python runserver.py
+
+cd /app/ulakbus/gunicorn
+gunicorn server:app -c gunicorn_config.py
