@@ -22,7 +22,7 @@ ENV RIAK_PORT '8098'
 ENV RIAK_PROTOCOL 'http'
 ENV DEFAULT_BUCKET_TYPE 'test'
 ENV ZENGINE_SETTINGS 'ulakbus.settings'
-ENV REDIS_SERVER 'ulakbus-redis-01.zetaops.local:redis-1:6379'
+ENV REDIS_SERVER 'ulakbus-load-balancer-02.zetaops.local:6379'
 
 COPY buildbot.tac /buildslave/
 #RUN chmod +x create && ./create
