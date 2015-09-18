@@ -146,7 +146,7 @@ class DockerLatentBuildSlave(AbstractLatentBuildSlave):
         instance = docker_client.create_container(
             image,
             self.command,
-            environment='MASTER_HOST=%s' % masterhost,
+            environment={"MASTER_HOST": masterhost},
             name='%s_%s' % (self.slavename, id(self)),
             volumes=self.volumes,
         )
