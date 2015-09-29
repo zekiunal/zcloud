@@ -3,18 +3,38 @@ import json
 import time
 import sys
 import re
+# Copyright (C) 2015 ZetaOps Inc.
+#
+# This file is licensed under the GNU General Public License v3
+# (GPLv3).  See LICENSE.txt for details.
 
-# TODO: change fleet api url
 url = 'http://ulakbus-control-center.zetaops.local:49153/fleet/v1/units'
 unit_url = 'https://raw.githubusercontent.com/zetaops/zcloud/master/units/'
 headers={'content-type':'application/json'}
 
+oldunitscount = 0
+oldunits = []
+
 def incrementUnitName(unitname):
+	#
+	# @returns str (unitname with incremented number)
+	#
+
+	# get units with name from fleet api
 	units = [u['name'] for u in requests.get(url).json()['units']]
+
+	# oldunitscount is count of units with given unitname
+	oldunitscount = sum(1 for i in units if unitname.split('@')[0] in i)
+	sys.stdout.write('number of old units with name "%s": %s' % (unitname, oldunitscount))
+
+	# oldunits will be destroyed after unit created and registered to haproxy
+	oldunits = [i for i in units if unitname.split('@')[0] in i]
+	sys.stdout.write('old units with name "%s": %s' % (unitname, oldunits))
+
 	for unit in units:
 		if unitname.split('@')[0] in unit:
 			name = unit
-	return '@'.join([unitname.split('@')[0], str(int(name.split('@')[1][0])+1) + '.service'])
+	return '@'.join([unitname.split('@')[0], str(int(name.split('@')[1].split('.')[0])+1) + '.service'])
 
 def createServiceOptions(unitname):
 	r = requests.get(unit_url+unitname)
@@ -27,6 +47,11 @@ def createServiceOptions(unitname):
 		options.append({'section':section, 'name': line.split('=')[0], 'value': '='.join(line.split('=')[1:])}) if '=' in line else True
 	return options
 
+def removeOldUnits():
+	for unit in oldunits:
+		deleteunit = requests.delete(url+'/'+unit)
+		sys.stdout.write('destroyed unit(s) result: %s' % deleteunit.content)
+
 def createUnit(unitname):
 	# if unitname[-1] != '@':
 	# 	raise Exception('unitname must end with @')
@@ -35,11 +60,13 @@ def createUnit(unitname):
 	newunit['desiredState'] = 'launched'
 	newunit['options'] = createServiceOptions(unitname)
 	unitcreate = requests.put(url+'/'+newunit['name'], data=json.dumps(newunit), headers=headers)
-	return unitcreate.content
+	sys.stdout.write('created unit with name %s' % newunit['name'])
+	# wait for new unit registered to haproxy
+	time.sleep(150)
+	removeOldUnits()
+	sys.stdout.write('destroyed unit(s) with name %s' % ', '.join(oldunits))
 
-def removeOldUnits(unit):
-	# TODO: fleet api delete call
-	pass
+	return unitcreate.content
 
 if __name__ == '__main__':
 	createUnit(sys.argv[1])
