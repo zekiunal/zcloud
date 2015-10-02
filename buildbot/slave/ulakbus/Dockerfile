@@ -1,11 +1,15 @@
 FROM phusion/baseimage:0.9.17
 RUN apt-get update && apt-get install -y \
    python-dev \
+   python3.4-dev \
+   python3-setuptools \
    python-pip \
+   python3-pip \
    libffi-dev \
    libssl-dev \
    git
 RUN pip install twisted==15.2.1 buildbot-slave pytest
+RUN pip3 install pytest
 RUN easy_install --upgrade six
 RUN groupadd -r buildbot && useradd -r -g buildbot buildbot
 # RUN sed -Ei 's/(\%buildbot ALL=\(ALL\) )ALL/\1 NOPASSWD:ALL/' /etc/sudoers
