@@ -10,6 +10,7 @@ USER buildbot
 WORKDIR /buildslave
 COPY createunit.py /buildslave/
 COPY buildbot.tac /buildslave/
+COPY checkversionupdate.sh /buildslave/
 #RUN chmod +x create && ./create
 ENTRYPOINT ["/usr/local/bin/buildslave"]
 CMD ["start", "--nodaemon"]
