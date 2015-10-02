@@ -25,7 +25,7 @@ ENV PYOKO_SETTINGS 'ulakbus.settings'
 ENV RIAK_SERVER 'ulakbus-internal-riak-http.zetaops.local'
 ENV RIAK_PORT '8098'
 ENV RIAK_PROTOCOL 'http'
-ENV DEFAULT_BUCKET_TYPE 'test'
+ENV DEFAULT_BUCKET_TYPE 'buildbot_test'
 ENV ZENGINE_SETTINGS 'ulakbus.settings'
 ENV REDIS_SERVER 'ulakbus-load-balancer-02.zetaops.local:6379'
 
