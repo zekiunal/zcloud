@@ -22,7 +22,7 @@ WORKDIR /buildslave
 
 # environment variables
 ENV PYOKO_SETTINGS 'ulakbus.settings'
-ENV RIAK_SERVER 'ulakbus-internal-riak-http.zetaops.local'
+ENV RIAK_SERVER 'ulakbus-load-balancer-02.zetaops.local'
 ENV RIAK_PORT '8098'
 ENV RIAK_PROTOCOL 'http'
 ENV DEFAULT_BUCKET_TYPE 'buildbot_test'

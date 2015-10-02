@@ -1,12 +1,14 @@
+# Copyright (C) 2015 ZetaOps Inc.
+#
+# This file is licensed under the GNU General Public License v3
+# (GPLv3).  See LICENSE.txt for details.
+
 import requests
 import json
 import time
 import sys
 import re
-# Copyright (C) 2015 ZetaOps Inc.
-#
-# This file is licensed under the GNU General Public License v3
-# (GPLv3).  See LICENSE.txt for details.
+import subprocess
 
 url = 'http://ulakbus-control-center.zetaops.local:49153/fleet/v1/units'
 unit_url = 'https://raw.githubusercontent.com/zetaops/zcloud/master/units/'
@@ -62,11 +64,19 @@ def createUnit(unitname):
 	unitcreate = requests.put(url+'/'+newunit['name'], data=json.dumps(newunit), headers=headers)
 	sys.stdout.write('created unit with name %s' % newunit['name'])
 	# wait for new unit registered to haproxy
-	time.sleep(150)
-	removeOldUnits()
-	sys.stdout.write('destroyed unit(s) with name %s' % ', '.join(oldunits))
+	if sys,argv[2] == "--no-delete":
+		time.sleep(150)
+		removeOldUnits()
+		sys.stdout.write('destroyed unit(s) with name %s' % ', '.join(oldunits))
 
 	return unitcreate.content
 
 if __name__ == '__main__':
-	createUnit(sys.argv[1])
+	to_deploy = subprocess.check_output("./checkversionupdate.sh", shell=True)
+	if '1' in to_deploy:
+		createUnit(sys.argv[1])
+
+
+
+
+
