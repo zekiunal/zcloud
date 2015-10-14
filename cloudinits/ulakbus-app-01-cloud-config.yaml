@@ -183,6 +183,7 @@ coreos:
         [Service]
         TimeoutStartSec=0
         EnvironmentFile=/etc/environment
+        Restart=Always
 
         ExecStartPre=-/usr/bin/docker kill logspout
         ExecStartPre=-/usr/bin/docker rm logspout
