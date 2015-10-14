@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends git libssl-dev 
     && pip install cryptography \
     && pip install gunicorn gevent
 
-RUN apt-get purge gcc \
+RUN apt-get purge -y gcc \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Open ports for HTTP and Protocol Buffers
