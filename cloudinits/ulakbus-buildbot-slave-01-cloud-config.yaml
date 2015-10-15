@@ -6,7 +6,7 @@ users:
 coreos:
   etcd:
     name: buildbot-slave-01
-    discovery: https://discovery.etcd.io/3eb2822366a0d9921f41055f6ed59632
+    discovery: https://discovery.etcd.io/9d3d9e213743b5e1caa2e40a915031b4
     addr: $private_ipv4:4001
     peer-addr: $private_ipv4:7001
   fleet:
