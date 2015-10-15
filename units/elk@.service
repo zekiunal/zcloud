@@ -16,4 +16,5 @@ ExecStart=/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro  -v /mnt/data/
 ExecStop=/usr/bin/docker stop elk-%i
 
 [X-Fleet]
-MachineMetadata=machineof=logging,mahcine=logging-01
+MachineMetadata=machineof=logging
+MachineMetadata=mahcine=logging-01
