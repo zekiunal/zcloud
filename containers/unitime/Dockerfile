@@ -1,25 +1,19 @@
-FROM phusion/baseimage:latest
+FROM tomcat:7-jre8
 MAINTAINER Ali Riza Keles, alirza@zetaops.io
-
-# Environmental variables
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update -qq && apt-get install -y tomcat7 mysql-server
 
-ADD unitime /opt/unitime
-RUN cp /opt/unitime/web/UniTime.war /var/lib/tomcat7/webapps/
-RUN cp /opt/unitime/mysql-connector-java-5.1.36/mysql-connector-java-5.1.36-bin.jar \
-                                               /usr/share/java/mysql-connector-java-5.1.36-bin.jar
-RUN ln -s /usr/share/java/mysql-connector-java-5.1.36-bin.jar /usr/share/tomcat7/lib/mysql-connector-java-5.1.36-bin.jar
-RUN sed -i.bak "s/Xmx128m/Xmx1024m/" /etc/default/tomcat7
+COPY unitime/web/UniTime.war /usr/local/tomcat/webapps/
+COPY mysql-connector-java-5.1.37/mysql-connector-java-5.1.37-bin.jar \
+                                               /usr/local/tomcat/lib/mysql-connector-java-5.1.37-bin.jar
 
-RUN service mysql restart \
-    && mysql -uroot -f < /opt/unitime/doc/mysql/schema.sql \
-    && mysql -uroot < /opt/unitime/doc/mysql/blank-data.sql
+RUN echo -e 'log4j.appender.unitimeLogFile=org.apache.log4j.DailyRollingFileAppender \
+log4j.appender.unitimeLogFile.File=${catalina.base}/logs/unitime-debug.log \
+log4j.appender.unitimeLogFile.DatePattern='\''.'\''yyyy-MM-dd \
+log4j.appender.unitimeLogFile.Append=true \
+log4j.appender.unitimeLogFile.layout=org.apache.log4j.PatternLayout \
+log4j.appender.unitimeLogFile.layout.ConversionPattern=[%-d{MM/dd/yy HH:mm:ss}] %-6p %c{1} -> %m%n \
+log4j.logger.org.unitime=DEBUG, unitimeLogFile' >> /usr/local/tomcat/conf/catalina.properties
 
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
 
-
-# Cleanup
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Leverage the baseimage-docker init system
-CMD ["/sbin/my_init", "--quiet"]
