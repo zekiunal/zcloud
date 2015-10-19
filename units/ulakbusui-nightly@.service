@@ -1,0 +1,19 @@
+[Unit]
+Description=ulakbus-ui
+Requires=etcd.service
+Requires=docker.service
+After=etcd.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+KillMode=none
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill ulakbusui-nightly-%i
+ExecStartPre=-/usr/bin/docker rm ulakbusui-nightly-%i
+ExecStartPre=/usr/bin/docker pull zetaops/ulakbus-ui-nightly
+ExecStart=/usr/bin/docker run --name ulakbusui-nightly-%i -v /etc/localtime:/etc/localtime:ro  -P zetaops/ulakbus-ui-nightly
+ExecStop=/usr/bin/docker stop ulakbusui-nightly-%i
+
+[X-Fleet]
+MachineMetadata=machineof=app

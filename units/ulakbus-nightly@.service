@@ -1,0 +1,19 @@
+[Unit]
+Description=ulakbus
+Requires=etcd.service
+Requires=docker.service
+After=etcd.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+KillMode=none
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill ulakbus-nightly-%i
+ExecStartPre=-/usr/bin/docker rm ulakbus-nightly-%i
+ExecStartPre=/usr/bin/docker pull zetaops/ulakbus-nightly
+ExecStart=/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro --name ulakbus-nightly-%i -e RIAK_SERVER=ulakbus-load-balancer-02.zetaops.local -e RIAK_PROTOCOL=http -e RIAK_PORT=8098 -e REDIS_SERVER=ulakbus-load-balancer-02.zetaops.local:6379 -P zetaops/ulakbus-nightly
+ExecStop=/usr/bin/docker stop ulakbus-nightly-%i
+
+[X-Fleet]
+MachineMetadata=machineof=app
