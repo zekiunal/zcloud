@@ -12,7 +12,7 @@ EnvironmentFile=/etc/environment
 ExecStartPre=-/usr/bin/docker kill elk-%i
 ExecStartPre=-/usr/bin/docker rm elk-%i
 ExecStartPre=/usr/bin/docker pull zetaops/elk
-ExecStart=/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro  -v /mnt/data/elasticsearch:/var/lib/elasticsearch --name elk-%i -p 5000:5000/udp -p 5006:5006/udp -p 5301:5301 -p 9200:9200 -p 5601:5601 zetaops/elk
+ExecStart=/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro  -v /mnt/data/elasticsearch:/var/lib/elasticsearch --name elk-%i -p 5000:5000/udp -p 5006:5006/udp -p 5007:5007/udp -p 5301:5301 -p 9200:9200 -p 5601:5601 zetaops/elk
 ExecStop=/usr/bin/docker stop elk-%i
 
 [X-Fleet]
