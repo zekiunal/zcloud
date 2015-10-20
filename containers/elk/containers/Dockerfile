@@ -66,8 +66,9 @@ ENV PATH /opt/logstash/bin:$PATH
 
 COPY ./logstash_config/logstash.conf /logstash_config/logstash.conf
 
-RUN mkdir -p /opt/logstash/patterns \
-	&&chown logstash:logstash /opt/logstash/patterns
+#RUN mkdir -p /opt/logstash/patterns \
+#	&& chown logstash:logstash /opt/logstash/patterns
+#COPY ./patterns/haproxy /opt/logstash/patterns/haproxy
 
 ############### SUPERVISORD ################
 
@@ -83,6 +84,6 @@ COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./start.sh /start.sh
 RUN chmod +x start.sh
 
-EXPOSE 5601 9200 9300 5000
+EXPOSE 5601 9200 9300 5000 5006 5007
 
 CMD [ "/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
