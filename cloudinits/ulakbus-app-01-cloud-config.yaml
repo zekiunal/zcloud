@@ -189,7 +189,7 @@ coreos:
         ExecStartPre=-/usr/bin/docker rm logspout
         ExecStartPre=/usr/bin/docker pull gliderlabs/logspout
 
-        ExecStart=/bin/bash -c '/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro -e SYSLOG_FORMAT=rfc3164 --name logspout --volume=/var/run/docker.sock:/tmp/docker.sock gliderlabs/logspout syslog://ulakbus-logging-01.zetaops.local:5006'
+        ExecStart=/bin/bash -c '/usr/bin/docker run -v /etc/localtime:/etc/localtime:ro -e SYSLOG_FORMAT=rfc3164 --name logspout --volume=/var/run/docker.sock:/tmp/docker.sock gliderlabs/logspout syslog://ulakbus-logging-01.zetaops.local:5007'
         ExecStop=/usr/bin/docker stop logspout
 
 
