@@ -14,6 +14,7 @@ node "Node" {
     folder "Fleet Controled Orchestration Units"{
         (Registrator2Etcd) as R2E
         (Registrator2Consul) as R2C
+        (Logspout) as R2L
     }
 
     Docker .> R2E
@@ -51,7 +52,7 @@ node "Node" {
         and health check
     end note
 
-    folder "Fleet Controlled Application Units" {
+    folder "VM" {
         folder "Riak KV Cluster" as RiakKVCluster{
             (Riak KV) as Riak1
             (Riak KV) as Riak2
@@ -60,11 +61,6 @@ node "Node" {
             (Riak KV) as Riak5
             note right of Riak1
                 Large VM
-                Docker Container
-                Fleet Unit
-                Exposed Ports:
-                8087 8098 8043
-                11000 - 12999
                 Volume 20gb /var/riak/data
             end note
         }
@@ -78,6 +74,11 @@ node "Node" {
                 Fleet Unit
             end note
         }
+
+
+    }
+
+    folder "Fleet Controlled Application Units" {
         folder "Public Load Balancers" as PublicLB {
             (HA Proxy with Confd) as HAProxyConfdPublic1
             (HA Proxy with Confd) as HAProxyConfdPublic2
@@ -106,13 +107,20 @@ node "Node" {
             (Zato Web Admin) as ZatoWA1
             (Zato Web Admin) as ZatoWA2
         }
+        folder "ELK Servers" as ELKServers{
+            (ELK Server) as ELKServer1
+            (ELK Server) as ELKServer2
+        }
+        folder "Buildbot Servers" as BuildBotServers{
+            (Master Server) as Master1
+            (Salve Server) as Slave1
+            (Salve Server) as SlaveN
+        }
         PublicLB--> AppContainers
         PrivateLB --> RedisCluster
         PrivateLB --> RiakCSCluster
         PrivateLB <-- AppContainers
-        PrivateLB --> RiakKVCluster
         PrivateLB --> ZatoServers
-        RiakCSCluster --> RiakKVCluster
     }
 }
 @enduml
