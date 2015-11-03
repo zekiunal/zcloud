@@ -4,6 +4,9 @@ dest	= "/usr/local/etc/haproxy/haproxy.cfg"
 keys	= [
     "/services/ulakbus-ui-80",
     "/services/ulakbus",
-    "/services/buildbot-master-8010"
+    "/services/buildbot-master-8010",
+    "/services/ulakbus-ui-nightly-80",
+    "/services/ulakbus-nightly"
+
 ]
 reload_cmd 	= "haproxy -V -f /usr/local/etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -d -D -sf $(cat /var/run/haproxy.pid)"
