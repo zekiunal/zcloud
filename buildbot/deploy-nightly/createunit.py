@@ -64,7 +64,10 @@ def createUnit(unitname):
 	unitcreate = requests.put(url+'/'+newunit['name'], data=json.dumps(newunit), headers=headers)
 	sys.stdout.write('created unit with name %s' % newunit['name'])
 	# wait for new unit registered to haproxy
-	if sys.argv[2] == "--no-delete":
+	try:
+	    if sys.argv[2] == "--no-delete":
+	    	return unitcreate.content
+	except IndexError:
 		time.sleep(150)
 		removeOldUnits()
 		sys.stdout.write('destroyed unit(s) with name %s' % ', '.join(oldunits))
