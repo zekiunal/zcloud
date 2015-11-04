@@ -13,6 +13,7 @@ ENV RIAK_PORT 8098
 ENV REDIS_SERVER 127.0.0.1:6379
 ENV RIAK_SERVER 127.0.0.1
 ENV RIAK_PROTOCOL http
+ENV ALLOWED_ORIGINS http://nightly.ulakbus.net
 
 # libssl and libffi dev packages for riak client
 RUN apt-get update && apt-get install -y --no-install-recommends git libssl-dev libffi-dev gcc \
