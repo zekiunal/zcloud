@@ -72,9 +72,7 @@ def createUnit(unitname):
 	return unitcreate.content
 
 if __name__ == '__main__':
-	to_deploy = subprocess.check_output("./checkversionupdate.sh", shell=True)
-	if '1' in to_deploy:
-		createUnit(sys.argv[1])
+	createUnit(sys.argv[1])
 
 
 
