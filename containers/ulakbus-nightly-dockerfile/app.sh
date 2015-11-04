@@ -8,7 +8,7 @@ git clone https://github.com/zetaops/ulakbus.git
 
 ### Run setup.py ###
 cd /app/ulakbus/
-git checkout $(git describe --abbrev=0 --tags)
+# git checkout $(git describe --abbrev=0 --tags)
 python setup.py install
 
 ### Run Server ###
